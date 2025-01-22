@@ -53,7 +53,7 @@ trigger:
 action:
   - choose:
       # Scénario Hiver/Automne
-      - conditions:
+            - conditions:
           - condition: or
             conditions:
               - condition: state
@@ -63,8 +63,6 @@ action:
                 entity_id: !input current_season
                 state: "Automne"
         sequence:
-          - choose:
-              # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
               # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
               - conditions:
                   - condition: numeric_state
