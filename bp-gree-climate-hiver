@@ -88,7 +88,7 @@ action:
               entity_id: !input climatiseur_entity
             data:
               swing_mode: "horizontal"
-          - delay: "00:15:00"  # Attendre 15 minutes
+          - delay: "00:10:00"  # Attendre 15 minutes
           # Vérifier si la température est toujours au-dessus du seuil
           - choose:
               - conditions:
@@ -101,9 +101,8 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: "off"  
+                      hvac_mode: "off" 
   
-
       # Condition : Si la température actuelle est inférieure à la tolérance
       - conditions:
           - condition: numeric_state
