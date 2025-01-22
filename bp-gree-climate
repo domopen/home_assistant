@@ -93,7 +93,7 @@ action:
               entity_id: !input climatiseur_entity
             data:
               fan_mode: low
-          - delay: "00:10:00"  # Attendre 10 minutes
+          - delay: "00:15:00"  # Attendre 10 minutes
           # Vérifier si la température est toujours au-dessus du seuil
           - choose:
               - conditions:
