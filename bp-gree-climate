@@ -107,6 +107,7 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       hvac_mode: "off" 
+              - delay: "00:30:00"
   
       # Condition : Si la température actuelle est inférieure à la tolérance
       - conditions:
