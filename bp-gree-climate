@@ -139,12 +139,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      target_temp: !input temperature_cible
+                      target_temp_low: !input temperature_cible
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: high
+                      fan_mode: auto
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -170,17 +170,17 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      target_temp: !input temperature_cible
+                      target_temp_low: !input temperature_cible
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: medium
+                      fan_mode: auto
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      swing_mode: "horizontal"
+                      swing_mode: "vertical"
 
               # Condition : Si la température cible est dans les tolérances et inférieure à la température extérieure
               - conditions:
@@ -204,12 +204,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: medium
+                      fan_mode: auto
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      swing_mode: "horizontal"
+                      swing_mode: "vertical"
 
               # Condition : Si la température cible est dans les tolérances et supérieure à la température extérieure
               - conditions:
@@ -233,12 +233,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: medium
+                      fan_mode: auto
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      swing_mode: "horizontal"
+                      swing_mode: "vertical"
 
       # Scénario Été/printemps
       - conditions:
@@ -271,12 +271,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: medium
+                      fan_mode: auto
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      swing_mode: "horizontal"
+                      swing_mode: "vertical"
 
               # Condition : Si la température actuelle est supérieure à la tolérance et inférieure à la température extérieure
               - conditions:
@@ -297,12 +297,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: high
+                      fan_mode: auto
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      swing_mode: "horizontal"
+                      swing_mode: "vertical"
 
               # Condition : Si la température actuelle est inférieure à la tolérance et supérieure à la température extérieure
               - conditions:
@@ -358,12 +358,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: medium
+                      fan_mode: auto
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      swing_mode: "horizontal"
+                      swing_mode: "vertical"
 
               # Condition : Si la température cible est dans les tolérances et supérieure à la température extérieure
               - conditions:
