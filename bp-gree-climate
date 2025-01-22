@@ -157,7 +157,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: medium
+                      fan_mode: "medium"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
