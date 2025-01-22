@@ -237,7 +237,6 @@ action:
                     data:
                       swing_mode: "horizontal"
 
-  - choose:
       # Scénario Été/printemps
       - condition: or
         conditions:
