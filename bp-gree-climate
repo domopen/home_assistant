@@ -139,7 +139,7 @@ action:
             below: !input max_temperature
             above: !input min_temperature
         sequence:
-          - delay: "00:15:00"
+          - delay: "00:10:00"
           # Vérifier si la température est toujours dans les tolérances
           - choose:
               - conditions:
