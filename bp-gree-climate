@@ -163,4 +163,4 @@ action:
                     data:
                       swing_mode: "horizontal"
 
-mode: restart
+mode: single
