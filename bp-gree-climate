@@ -78,12 +78,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: heat
+                      hvac_mode: "heat"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: low
+                      fan_mode: "low"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -101,7 +101,7 @@ action:
                             target:
                               entity_id: !input climatiseur_entity
                             data:
-                              hvac_mode: off
+                              hvac_mode: "off"
                           - delay: "00:30:00"
 
               # Condition : Si la température actuelle est supérieure à la tolérance et inférieur à la température extérieur
@@ -118,7 +118,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: off
+                      hvac_mode: "off"
 
               # Condition : Si la température actuelle est inférieure à la tolérance et supérieur à la température extérieur
               - conditions:
@@ -134,12 +134,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: heat
+                      hvac_mode: "heat"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: "auto"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -160,12 +160,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: heat
+                      hvac_mode: "heat"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: "auto"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -189,12 +189,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: heat
+                      hvac_mode: "heat"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: "auto"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -218,12 +218,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: heat
+                      hvac_mode: "heat"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: "auto"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -256,12 +256,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: cool
+                      hvac_mode: "cool"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: "auto"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -282,12 +282,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: cool
+                      hvac_mode: "cool"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: "auto"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -308,7 +308,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: auto
+                      hvac_mode: "auto"
 
               # Condition : Si la température actuelle est inférieure à la tolérance et inférieure à la température extérieure
               - conditions:
@@ -324,7 +324,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: auto
+                      hvac_mode: "auto"
 
               # Condition : Si la température cible est dans les tolérances et inférieure à la température extérieure
               - conditions:
@@ -343,12 +343,12 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: cool
+                      hvac_mode: "cool"
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: "auto"
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -372,6 +372,6 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: off
+                      hvac_mode: "off"
 
 mode: single
