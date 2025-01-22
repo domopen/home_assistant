@@ -27,7 +27,7 @@ blueprint:
       name: Température extérieur
       selector:
         entity:
-          domain: input_text
+          domain: input_number
     temperature_cible:
       name: Température cible
       selector: 
