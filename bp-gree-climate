@@ -76,19 +76,19 @@ action:
             entity_id: !input temperature_entity
             above: !input max_temperature
         sequence:
-          # Activer le mode ventilation (fan only) pour 15 minutes
+          # Activer le mode ventilation (fan only) pour 10 minutes
           - service: climate.set_hvac_mode
             target:
               entity_id: !input climatiseur_entity
             data:
-              hvac_mode: fan_only
+              hvac_mode: heat
           # Configurer le mode de balancement horizontal
           - service: climate.set_swing_mode
             target:
               entity_id: !input climatiseur_entity
             data:
               swing_mode: "horizontal"
-          - delay: "00:10:00"  # Attendre 15 minutes
+          - delay: "00:10:00"  # Attendre 10 minutes
           # Vérifier si la température est toujours au-dessus du seuil
           - choose:
               - conditions:
