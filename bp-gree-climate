@@ -139,7 +139,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      temperature: !input temperature_cible
+                      target_temp: !input temperature_cible
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -170,7 +170,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      temperature: !input temperature_cible
+                      target_temp: !input temperature_cible
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
