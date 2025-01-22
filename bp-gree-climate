@@ -69,7 +69,7 @@ action:
             state: "Hiver"
         sequence:
           - choose:
-              # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
+              # Condition : Si la température actuelle est supérieure à la tolérance et supérieure à la température extérieur
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
@@ -109,7 +109,7 @@ action:
                               hvac_mode: "off"
                           - delay: "00:30:00"
 
-              # Condition : Si la température actuelle est supérieure à la tolérance et inférieur à la température extérieur
+              # Condition : Si la température actuelle est supérieure à la tolérance et inférieure à la température extérieur
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
@@ -125,7 +125,7 @@ action:
                     data:
                       hvac_mode: off
 
-              # Condition : Si la température actuelle est inférieure à la tolérance et supérieur à la température extérieur
+              # Condition : Si la température actuelle est inférieure à la tolérance et supérieure à la température extérieur
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
@@ -156,7 +156,7 @@ action:
                     data:
                       swing_mode: "horizontal"
 
-              # Condition : Si la température actuelle est inférieure à la tolérance et inférieur à la température extérieur
+              # Condition : Si la température actuelle est inférieure à la tolérance et inférieure à la température extérieur
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
