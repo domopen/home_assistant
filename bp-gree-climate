@@ -135,11 +135,6 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       hvac_mode: heat
-                  - service: climate.set_temperature
-                    target:
-                      entity_id: !input climatiseur_entity
-                    data:
-                      target_temp_low: !input temperature_cible
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -166,11 +161,6 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       hvac_mode: heat
-                  - service: climate.set_temperature
-                    target:
-                      entity_id: !input climatiseur_entity
-                    data:
-                      target_temp_low: !input temperature_cible
                   - service: climate.set_fan_mode
                     target:
                       entity_id: !input climatiseur_entity
