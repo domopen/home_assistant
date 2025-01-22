@@ -81,7 +81,7 @@ action:
             target:
               entity_id: !input climatiseur_entity
             data:
-              hvac_mode: heat
+              hvac_mode: fan_only
           # Configurer le mode de balancement horizontal
           - service: climate.set_swing_mode
             target:
@@ -138,7 +138,6 @@ action:
             below: !input max_temperature
             above: !input min_temperature
         sequence:
-          - delay: "00:10:00"
           # Vérifier si la température est toujours dans les tolérances
           - choose:
               - conditions:
