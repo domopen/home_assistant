@@ -118,7 +118,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: off
+                      hvac_mode: "off"
 
               # Condition : Si la température actuelle est inférieure à la tolérance et supérieur à la température extérieur
               - conditions:
