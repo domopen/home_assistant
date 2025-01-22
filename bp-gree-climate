@@ -81,13 +81,18 @@ action:
             target:
               entity_id: !input climatiseur_entity
             data:
-              hvac_mode: fan_only
+              hvac_mode: heat
           # Configurer le mode de balancement horizontal
           - service: climate.set_swing_mode
             target:
               entity_id: !input climatiseur_entity
             data:
               swing_mode: "horizontal"
+          - service: climate.set_fan_mode
+            target:
+              entity_id: !input climatiseur_entity
+            data:
+              fan_mode: low
           - delay: "00:10:00"  # Attendre 10 minutes
           # Vérifier si la température est toujours au-dessus du seuil
           - choose:
