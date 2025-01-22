@@ -19,7 +19,7 @@ blueprint:
         entity:
           domain: input_text
     selected_season:
-      name: saison choisie
+      name: Saison choisie
       selector:
         select:
           options:
@@ -29,10 +29,15 @@ blueprint:
             - "Automne"
             - "Hiver"
     schedule_entity:
-      name: Schedule
+      name: Planning d'automatisation
       selector:
         entity:
           domain: schedule
+    ext_temperature:
+      name: Température extérieur
+      selector:
+        entity:
+          domain: sensor
     temperature_cible:
       name: Température cible
       selector: 
@@ -52,107 +57,149 @@ blueprint:
 trigger:
   - platform: state
     entity_id: !input temperature_entity
-  - platform: time_pattern
-    minutes: /15
   - platform: state 
     entity_id: !input schedule_entity
 
-condition:
-  - alias: "Vérification du schedule et de la saison"
-    and:
-      - condition: state
-        entity_id: !input schedule_entity
-        state: "on"
-      - condition: state
-        entity_id: !input current_season
-        state: !input selected_season
-
 action:
   - choose:
-      # Saison d'Hiver
-      # Condition : Si la température actuelle est supérieure à la tolérance
+      # Scénario Hiver
       - conditions:
-          - condition: numeric_state
-            entity_id: !input temperature_entity
-            above: !input max_temperature
+          - condition: state
+            entity_id: !input current_season
+            state: "Hiver"
         sequence:
-          # Activer le mode ventilation (fan only) pour 10 minutes
-          - service: climate.set_hvac_mode
-            target:
-              entity_id: !input climatiseur_entity
-            data:
-              hvac_mode: heat
-          # Configurer le mode de balancement horizontal
-          - service: climate.set_swing_mode
-            target:
-              entity_id: !input climatiseur_entity
-            data:
-              swing_mode: "horizontal"
-          - service: climate.set_fan_mode
-            target:
-              entity_id: !input climatiseur_entity
-            data:
-              fan_mode: low
-          - delay: "00:15:00"  # Attendre 10 minutes
-          # Vérifier si la température est toujours au-dessus du seuil
           - choose:
+              # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
                     above: !input max_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input ext_temperature
                 sequence:
-                  # Si la température est toujours au-dessus du seuil, éteindre le climatiseur
+                  # Activer le mode chauffage et faible ventilation
                   - service: climate.set_hvac_mode
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: "off" 
-                  - delay: "00:30:00"
-  
-      # Condition : Si la température actuelle est inférieure à la tolérance
-      - conditions:
-          - condition: numeric_state
-            entity_id: !input temperature_entity
-            below: !input min_temperature
-        sequence:
-          # Activer le mode chauffage automatique
-          - service: climate.set_hvac_mode
-            target:
-              entity_id: !input climatiseur_entity
-            data:
-              hvac_mode: heat
-          - service: climate.set_temperature
-            target:
-              entity_id: !input climatiseur_entity
-            data:
-              temperature: !input temperature_cible
-          - service: climate.set_fan_mode
-            target:
-              entity_id: !input climatiseur_entity
-            data:
-              fan_mode: high
-          - service: climate.set_swing_mode
-            target:
-              entity_id: !input climatiseur_entity
-            data:
-              swing_mode: "horizontal"
+                      hvac_mode: heat
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: low
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "horizontal"
+                  # Vérifier si la température est toujours au-dessus du seuil
+                  - choose:
+                      - conditions:
+                          - condition: numeric_state
+                            entity_id: !input temperature_entity
+                            above: !input max_temperature
+                        sequence:
+                          # Si la température est toujours au-dessus du seuil, éteindre le climatiseur
+                          - service: climate.set_hvac_mode
+                            target:
+                              entity_id: !input climatiseur_entity
+                            data:
+                              hvac_mode: "off"
+                          - delay: "00:30:00"
 
-      # Condition : Si la température cible est atteinte (dans les tolérances)
-      - conditions:
-          - condition: numeric_state
-            entity_id: !input temperature_entity
-            below: !input max_temperature
-            above: !input min_temperature
-        sequence:
-          # Vérifier si la température est toujours dans les tolérances
-          - choose:
+              # Condition : Si la température actuelle est supérieure à la tolérance et inférieur à la température extérieur
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input max_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input ext_temperature
+                sequence:
+                  # Éteindre la climatisation
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: off
+
+              # Condition : Si la température actuelle est inférieure à la tolérance et supérieur à la température extérieur
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input min_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input ext_temperature
+                sequence:
+                  # Activer le mode chauffage automatique
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: heat
+                  - service: climate.set_temperature
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      temperature: !input temperature_cible
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: high
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "horizontal"
+
+              # Condition : Si la température actuelle est inférieure à la tolérance et inférieur à la température extérieur
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input min_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input ext_temperature
+                sequence:
+                  # Activer le mode chauffage automatique
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: heat
+                  - service: climate.set_temperature
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      temperature: !input temperature_cible
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: medium
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "horizontal"
+
+              # Condition : Si la température cible est dans les tolérances et inférieure à la température extérieure
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
                     below: !input max_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
                     above: !input min_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input ext_temperature
                 sequence:
-                  # Si la température est toujours dans les tolérances, mode auto
+                  # Activer chauffage + ventilation medium
                   - service: climate.set_hvac_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -163,6 +210,34 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       fan_mode: medium
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "horizontal"
+              # Condition : Si la température cible est dans les tolérances et supérieure à la température extérieure
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input max_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input min_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input ext_temperature
+                sequence:
+                  # Activer chauffage + ventilation medium
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: heat
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: low
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
