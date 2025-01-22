@@ -54,12 +54,14 @@ action:
   - choose:
       # Scénario Hiver/Automne
       - conditions:
-          - condition: state
-            entity_id: !input current_season
-            state: "Hiver"
-          - condition: state
-            entity_id: !input current_season
-            state: "Automne"
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input current_season
+                state: "Hiver"
+              - condition: state
+                entity_id: !input current_season
+                state: "Automne"
         sequence:
           - choose:
               # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
@@ -244,7 +246,7 @@ action:
             conditions:
               - condition: state
                 entity_id: !input current_season
-                state: "Été"
+                state: "Ete"
               - condition: state
                 entity_id: !input current_season
                 state: "Printemps"
