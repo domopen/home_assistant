@@ -101,7 +101,7 @@ action:
                             target:
                               entity_id: !input climatiseur_entity
                             data:
-                              hvac_mode: off
+                              hvac_mode: "off"
                           - delay: "00:30:00"
 
               # Condition : Si la température actuelle est supérieure à la tolérance et inférieur à la température extérieur
@@ -308,7 +308,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: auto
+                      hvac_mode: "auto"
 
               # Condition : Si la température actuelle est inférieure à la tolérance et inférieure à la température extérieure
               - conditions:
@@ -372,6 +372,6 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      hvac_mode: off
+                      hvac_mode: "off"
 
 mode: single
