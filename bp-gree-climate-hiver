@@ -1,4 +1,4 @@
-blueprint:
+ublueprint:
   name: Gestion automatique du climatiseur avec seuil de température
   description: Un blueprint pour ajuster automatiquement un climatiseur en fonction de la température mesurée.
   domain: automation
@@ -157,7 +157,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      fan_mode: auto
+                      fan_mode: medium
                   - service: climate.set_swing_mode
                     target:
                       entity_id: !input climatiseur_entity
