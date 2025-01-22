@@ -1,4 +1,4 @@
-ublueprint:
+blueprint:
   name: Gestion automatique du climatiseur avec seuil de température
   description: Un blueprint pour ajuster automatiquement un climatiseur en fonction de la température mesurée.
   domain: automation
