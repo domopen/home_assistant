@@ -65,6 +65,7 @@ action:
         sequence:
           - choose:
               # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
+              # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
@@ -89,20 +90,17 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       swing_mode: "horizontal"
-                  # Vérifier si la température est toujours au-dessus du seuil
-                  - choose:
-                      - conditions:
-                          - condition: numeric_state
-                            entity_id: !input temperature_entity
-                            above: !input max_temperature
-                        sequence:
-                          # Si la température est toujours au-dessus du seuil, éteindre le climatiseur
-                          - service: climate.set_hvac_mode
-                            target:
-                              entity_id: !input climatiseur_entity
-                            data:
-                              hvac_mode: "off"
-                          - delay: "00:30:00"
+                  # Attendre avant de vérifier à nouveau la température
+                  - delay: "00:05:00"
+                  # Une seule vérification après le délai
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input max_temperature
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: "off"
 
               # Condition : Si la température actuelle est supérieure à la tolérance et inférieur à la température extérieur
               - conditions:
@@ -113,7 +111,6 @@ action:
                     entity_id: !input temperature_entity
                     below: !input ext_temperature
                 sequence:
-                  # Éteindre la climatisation
                   - service: climate.set_hvac_mode
                     target:
                       entity_id: !input climatiseur_entity
