@@ -64,10 +64,8 @@ action:
                 state: "Automne"
         sequence:
           - choose:
-
-              # - Température actuelle supérieure à la tolérance
-
-                - conditions:
+              # Température actuelle supérieure à la tolérance
+              - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
                     above: !input max_temperature
@@ -77,10 +75,8 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       hvac_mode: "off"
-
-              # - Température actuelle inférieure à la tolérance
-
-                - conditions:
+              # Température actuelle inférieure à la tolérance
+              - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
                     below: !input min_temperature
@@ -100,9 +96,7 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       swing_mode: "vertical"
-
               # Température actuelle dans les tolérances
-
               - conditions:
                   - condition: numeric_state
                     entity_id: !input temperature_entity
@@ -126,7 +120,6 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       swing_mode: "vertical"
-
 
       # Scénario Été/printemps
       - conditions:
@@ -161,7 +154,6 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       swing_mode: "vertical"
-
               # Température actuelle inférieure à la tolérance
               - conditions:
                   - condition: numeric_state
@@ -173,7 +165,6 @@ action:
                       entity_id: !input climatiseur_entity
                     data:
                       hvac_mode: "off"
-
               # Température cible dans les tolérances 
               - conditions:
                   - condition: numeric_state
