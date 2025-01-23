@@ -160,7 +160,7 @@ action:
                     target:
                       entity_id: !input climatiseur_entity
                     data:
-                      swing_mode: "horizontal"
+                      swing_mode: "vertical"
 
               # Condition : Si la température actuelle est inférieure à la tolérance et inférieur à la température extérieur
               - conditions:
