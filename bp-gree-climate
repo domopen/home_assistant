@@ -83,7 +83,7 @@ action:
             sequence:
               - service: climate.set_temperature
                 target:
-                  entity_id: climate.heating
+                  entity_id: !input climatiseur_entity
                 data:
                   temperature: "{{ states('sensor.temperature_cible') }}"
               - service: climate.set_hvac_mode
@@ -112,7 +112,7 @@ action:
             sequence:
               - service: climate.set_temperature
                 target:
-                  entity_id: climate.heating
+                  entity_id: !input climatiseur_entity
                 data:
                   temperature: "{{ states('sensor.temperature_cible') }}"
               - service: climate.set_hvac_mode
@@ -180,7 +180,7 @@ action:
             sequence:
               - service: climate.set_temperature
                 target:
-                  entity_id: climate.heating
+                  entity_id: !input climatiseur_entity
                 data:
                   temperature: "{{ states('sensor.temperature_cible') }}"
               - service: climate.set_hvac_mode
