@@ -1,1 +1,202 @@
+blueprint:
+  name: Gestion automatique du climatiseur avec seuil de température
+  description: Un blueprint pour ajuster automatiquement un climatiseur en fonction de la température mesurée.
+  domain: automation
+  input:
+    temperature_entity:
+      name: Capteur de température 
+      selector:
+        entity:
+          domain: input_number
+    climatiseur_entity:
+      name: Entité du climatiseur
+      selector:
+        entity:
+          domain: climate
+    current_season:
+      name: Input text de la saison actuelle
+      selector:
+        entity:
+          domain: input_text
+    schedule_entity:
+      name: Planning d'automatisation
+      selector:
+        entity:
+          domain: schedule
+    ext_temperature:
+      name: Température extérieur
+      selector:
+        entity:
+          domain: input_number
+    temperature_cible:
+      name: Température cible
+      selector: 
+        entity: 
+          domain: input_number
+    min_temperature:
+      name: Température minimale tolérée
+      selector:
+        entity:
+          domain: sensor
+    max_temperature:
+      name: Température maximale tolérée 
+      selector:
+        entity:
+          domain: sensor
+          
+trigger:
+  - platform: state
+    entity_id: !input temperature_entity
+  - platform: state 
+    entity_id: !input schedule_entity
 
+action:
+  - choose:
+      # Scénario Hiver/Automne
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input current_season
+                state: "Hiver"
+              - condition: state
+                entity_id: !input current_season
+                state: "Automne"
+        sequence:
+          - choose:
+
+              # - Température actuelle supérieure à la tolérance
+
+                - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input max_temperature
+                sequence:
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: "off"
+
+              # - Température actuelle inférieure à la tolérance
+
+                - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input min_temperature
+                sequence:
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: heat
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: "high"
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "vertical"
+
+              # Température actuelle dans les tolérances
+
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input max_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input min_temperature
+                sequence:
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: heat
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: "auto"
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "vertical"
+
+
+      # Scénario Été/printemps
+      - conditions:
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input current_season
+                state: "Ete"
+              - condition: state
+                entity_id: !input current_season
+                state: "Printemps"
+        sequence:
+          - choose:
+              # Température actuelle supérieure à la tolérance
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input max_temperature
+                sequence:
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: cool
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: "high"
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "vertical"
+
+              # Température actuelle inférieure à la tolérance
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input min_temperature
+                sequence:
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: "off"
+
+              # Température cible dans les tolérances 
+              - conditions:
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    below: !input max_temperature
+                  - condition: numeric_state
+                    entity_id: !input temperature_entity
+                    above: !input min_temperature
+                sequence:
+                  - service: climate.set_hvac_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      hvac_mode: cool
+                  - service: climate.set_fan_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      fan_mode: "auto"
+                  - service: climate.set_swing_mode
+                    target:
+                      entity_id: !input climatiseur_entity
+                    data:
+                      swing_mode: "vertical"
+
+mode: single
