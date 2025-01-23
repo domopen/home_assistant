@@ -81,6 +81,11 @@ action:
                 entity_id: !input temperature_entity
                 below: !input min_temperature
             sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: climate.heating
+                data:
+                  temperature: "{{ states('input_number.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -105,6 +110,11 @@ action:
                 entity_id: !input temperature_entity
                 above: !input min_temperature
             sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: climate.heating
+                data:
+                  temperature: "{{ states('input_number.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -139,6 +149,11 @@ action:
                 entity_id: !input temperature_entity
                 above: !input max_temperature
             sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: climate.heating
+                data:
+                  temperature: "{{ states('input_number.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -149,6 +164,35 @@ action:
                   entity_id: !input climatiseur_entity
                 data:
                   fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  swing_mode: "vertical"
+          # Température cible dans les tolérances 
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input max_temperature
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                above: !input min_temperature
+            sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: climate.heating
+                data:
+                  temperature: "{{ states('input_number.temperature_cible') | float }}"
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  fan_mode: "auto"
               - service: climate.set_swing_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -165,29 +209,5 @@ action:
                   entity_id: !input climatiseur_entity
                 data:
                   hvac_mode: "off"
-          # Température cible dans les tolérances 
-          - conditions:
-              - condition: numeric_state
-                entity_id: !input temperature_entity
-                below: !input max_temperature
-              - condition: numeric_state
-                entity_id: !input temperature_entity
-                above: !input min_temperature
-            sequence:
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  hvac_mode: cool
-              - service: climate.set_fan_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  fan_mode: "auto"
-              - service: climate.set_swing_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  swing_mode: "vertical"
 
 mode: single
