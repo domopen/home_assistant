@@ -45,5 +45,3 @@ action:
   - service: input_boolean.turn_off
     target:
       entity_id: !input lock_entity
-
-mode: single
