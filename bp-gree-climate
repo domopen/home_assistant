@@ -43,6 +43,11 @@ blueprint:
       selector:
         entity:
           domain: sensor
+    lock_entity:
+      name: Verrou de l'automation
+      selector:
+        entity:
+          domain: input_boolean
           
 trigger:
   - platform: state
@@ -50,10 +55,15 @@ trigger:
   - platform: state 
     entity_id: !input schedule_entity
 
+condition:
+  condition: state
+  entity_id: !input lock_entity
+  state: 'off'
+
 action:
   - choose:
       # Scénario Hiver/Automne
-            - conditions:
+      - conditions:
           - condition: or
             conditions:
               - condition: state
@@ -63,6 +73,7 @@ action:
                 entity_id: !input current_season
                 state: "Automne"
         sequence:
+          - choose:
               # Condition : Si la température actuelle est supérieure à la tolérance et supérieur à la température extérieur
               - conditions:
                   - condition: numeric_state
@@ -72,6 +83,10 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  # Activer le verrou
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer le mode chauffage et faible ventilation
                   - service: climate.set_hvac_mode
                     target:
@@ -109,6 +124,9 @@ action:
                     entity_id: !input temperature_entity
                     below: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   - service: climate.set_hvac_mode
                     target:
                       entity_id: !input climatiseur_entity
@@ -124,6 +142,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer le mode chauffage automatique
                   - service: climate.set_hvac_mode
                     target:
@@ -150,6 +171,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer le mode chauffage automatique
                   - service: climate.set_hvac_mode
                     target:
@@ -179,35 +203,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
-                  # Activer chauffage + ventilation medium
-                  - service: climate.set_hvac_mode
+                  - service: input_boolean.turn_on
                     target:
-                      entity_id: !input climatiseur_entity
-                    data:
-                      hvac_mode: heat
-                  - service: climate.set_fan_mode
-                    target:
-                      entity_id: !input climatiseur_entity
-                    data:
-                      fan_mode: "auto"
-                  - service: climate.set_swing_mode
-                    target:
-                      entity_id: !input climatiseur_entity
-                    data:
-                      swing_mode: "vertical"
-
-              # Condition : Si la température cible est dans les tolérances et supérieure à la température extérieure
-              - conditions:
-                  - condition: numeric_state
-                    entity_id: !input temperature_entity
-                    below: !input max_temperature
-                  - condition: numeric_state
-                    entity_id: !input temperature_entity
-                    above: !input min_temperature
-                  - condition: numeric_state
-                    entity_id: !input temperature_entity
-                    above: !input ext_temperature
-                sequence:
+                      entity_id: !input lock_entity
                   # Activer chauffage + ventilation medium
                   - service: climate.set_hvac_mode
                     target:
@@ -246,6 +244,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer le mode climatisation et ventilation medium
                   - service: climate.set_hvac_mode
                     target:
@@ -272,6 +273,9 @@ action:
                     entity_id: !input temperature_entity
                     below: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer climatisation et ventilation élevée
                   - service: climate.set_hvac_mode
                     target:
@@ -298,6 +302,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer le mode automatique
                   - service: climate.set_hvac_mode
                     target:
@@ -314,6 +321,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer le mode automatique
                   - service: climate.set_hvac_mode
                     target:
@@ -333,6 +343,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Activer clim + ventilation medium
                   - service: climate.set_hvac_mode
                     target:
@@ -362,6 +375,9 @@ action:
                     entity_id: !input temperature_entity
                     above: !input ext_temperature
                 sequence:
+                  - service: input_boolean.turn_on
+                    target:
+                      entity_id: !input lock_entity
                   # Désactiver la climatisation
                   - service: climate.set_hvac_mode
                     target:
