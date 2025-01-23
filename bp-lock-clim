@@ -1,1 +1,49 @@
+blueprint:
+  name: Déverrouillage automatique du climatiseur
+  description: Déverrouille l'automatisation quand la température est revenue dans les limites
+  domain: automation
+  input:
+    temperature_entity:
+      name: Capteur de température
+      selector:
+        entity:
+          domain: input_number
+    lock_entity:
+      name: Verrou de l'automation
+      selector:
+        entity:
+          domain: input_boolean
+    max_temperature:
+      name: Température maximale tolérée
+      selector:
+        entity:
+          domain: sensor
+    min_temperature:
+      name: Température minimale tolérée
+      selector:
+        entity:
+          domain: sensor
 
+trigger:
+  - platform: state
+    entity_id: !input temperature_entity
+
+condition:
+  - condition: state
+    entity_id: !input lock_entity
+    state: 'on'
+  - condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: !input temperature_entity
+        below: !input max_temperature
+      - condition: numeric_state
+        entity_id: !input temperature_entity
+        above: !input min_temperature
+
+action:
+  - service: input_boolean.turn_off
+    target:
+      entity_id: !input lock_entity
+
+mode: single
