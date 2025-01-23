@@ -13,34 +13,51 @@ blueprint:
       selector:
         entity:
           domain: input_boolean
-    max_temperature:
-      name: Température maximale tolérée
+    target_temp:
+      name: Température cible
       selector:
         entity:
-          domain: sensor
-    min_temperature:
-      name: Température minimale tolérée
+          domain: input_number
+    current_season:
+      name: Saison actuelle
       selector:
         entity:
-          domain: sensor
-
+          domain: input_text
 trigger:
   - platform: state
     entity_id: !input temperature_entity
-
 condition:
   - condition: state
     entity_id: !input lock_entity
     state: 'on'
-  - condition: and
+  - condition: or
     conditions:
-      - condition: numeric_state
-        entity_id: !input temperature_entity
-        below: !input max_temperature
-      - condition: numeric_state
-        entity_id: !input temperature_entity
-        above: !input min_temperature
-
+      - condition: and
+        conditions:
+          - condition: numeric_state
+            entity_id: !input temperature_entity
+            below: !input target_temp
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input current_season
+                state: "Hiver"
+              - condition: state
+                entity_id: !input current_season
+                state: "Automne"
+      - condition: and
+        conditions:
+          - condition: numeric_state
+            entity_id: !input temperature_entity
+            above: !input target_temp
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input current_season
+                state: "Ete"
+              - condition: state
+                entity_id: !input current_season
+                state: "Printemps"
 action:
   - service: input_boolean.turn_off
     target:
