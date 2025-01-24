@@ -7,7 +7,7 @@ blueprint:
       name: Capteur de température 
       selector:
         entity:
-          domain: input_number
+          domain: sensor
     climatiseur_entity:
       name: Entité du climatiseur
       selector:
@@ -27,12 +27,12 @@ blueprint:
       name: Température extérieur
       selector:
         entity:
-          domain: input_number
+          domain: sensor
     temperature_cible:
       name: Température cible
       selector: 
         entity: 
-          domain: input_number
+          domain: sensor
     min_temperature:
       name: Température minimale tolérée
       selector:
@@ -49,6 +49,8 @@ trigger:
     entity_id: !input temperature_entity
   - platform: state 
     entity_id: !input schedule_entity
+  - platform: time_pattern
+    minutes: "/15"
 
 action:
   choose:
@@ -81,11 +83,6 @@ action:
                 entity_id: !input temperature_entity
                 below: !input min_temperature
             sequence:
-              - service: climate.set_temperature
-                target:
-                  entity_id: climate.heating
-                data:
-                  temperature: "{{ states('input_number.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -101,6 +98,7 @@ action:
                   entity_id: !input climatiseur_entity
                 data:
                   swing_mode: "vertical"
+
           # Température actuelle dans les tolérances
           - conditions:
               - condition: numeric_state
@@ -110,11 +108,6 @@ action:
                 entity_id: !input temperature_entity
                 above: !input min_temperature
             sequence:
-              - service: climate.set_temperature
-                target:
-                  entity_id: climate.heating
-                data:
-                  temperature: "{{ states('input_number.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -149,11 +142,6 @@ action:
                 entity_id: !input temperature_entity
                 above: !input max_temperature
             sequence:
-              - service: climate.set_temperature
-                target:
-                  entity_id: climate.heating
-                data:
-                  temperature: "{{ states('input_number.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -178,11 +166,6 @@ action:
                 entity_id: !input temperature_entity
                 above: !input min_temperature
             sequence:
-              - service: climate.set_temperature
-                target:
-                  entity_id: climate.heating
-                data:
-                  temperature: "{{ states('input_number.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
