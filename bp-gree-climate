@@ -45,13 +45,13 @@ blueprint:
           domain: sensor
           
 trigger:
-  - platform: numeric_state
+  - platform: state
     entity_id: !input temperature_cible
 
-  - platform: numeric_state
+  - platform: state
     entity_id: !input temperature_entity
     above: !input max_temperature
-  - platform: numeric_state
+  - platform: state
     entity_id: !input temperature_entity
     below: !input min_temperature
 
