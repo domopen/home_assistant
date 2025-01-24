@@ -50,7 +50,7 @@ trigger:
   - platform: state 
     entity_id: !input schedule_entity
   - plateform: time_pattern
-    minutes: /15
+    minutes: "/15"
 
 action:
   choose:
