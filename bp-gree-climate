@@ -48,10 +48,10 @@ trigger:
   - platform: state
     entity_id: !input temperature_cible
 
-  - platform: state
+  - platform: numeric_state
     entity_id: !input temperature_entity
     above: !input max_temperature
-  - platform: state
+  - platform: numeric_state
     entity_id: !input temperature_entity
     below: !input min_temperature
 
