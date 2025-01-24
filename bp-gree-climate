@@ -49,7 +49,7 @@ trigger:
     entity_id: !input temperature_entity
   - platform: state 
     entity_id: !input schedule_entity
-  - plateform: time_pattern
+  - platform: time_pattern
     minutes: "/15"
 
 action:
