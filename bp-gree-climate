@@ -1,4 +1,4 @@
-blueprint:
+
   name: Gestion automatique du climatiseur avec seuil de température
   description: Un blueprint pour ajuster automatiquement un climatiseur en fonction de la température mesurée.
   domain: automation
@@ -49,6 +49,8 @@ trigger:
     entity_id: !input temperature_entity
   - platform: state 
     entity_id: !input schedule_entity
+  - plateform: time_pattern
+    minutes: /15
 
 action:
   choose:
@@ -81,6 +83,11 @@ action:
                 entity_id: !input temperature_entity
                 below: !input min_temperature
             sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  temperature: "{{ states('sensor.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -106,6 +113,11 @@ action:
                 entity_id: !input temperature_entity
                 above: !input min_temperature
             sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  temperature: "{{ state('sensor.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -140,6 +152,11 @@ action:
                 entity_id: !input temperature_entity
                 above: !input max_temperature
             sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: climate.heating
+                data:
+                  temperature: "{{ state('sensor.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
@@ -164,6 +181,11 @@ action:
                 entity_id: !input temperature_entity
                 above: !input min_temperature
             sequence:
+              - service: climate.set_temperature
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  temperature: "{{ state('sensor.temperature_cible') | float }}"
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
