@@ -71,6 +71,79 @@ trigger:
 
 action:
   choose:
+    # Mode Vacances (prioritaire)
+    - conditions:
+        - condition: state
+          entity_id: !input vacation_mode
+          state: "on"
+      sequence:
+        choose: 
+          # Arrêt des climatiseurs si min < température actuelle > max
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                above: !input min_temperature_vacation
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data: 
+                  hvac_mode: "off"
+
+          - conditions: 
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input max_temperature_vacation
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data: 
+                  hvac_mode: "off"
+
+          # Démarre en dehors des conditions précédentes
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                above: !input max_temperature_vacation
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data: 
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  swing_mode: "vertical"
+
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input min_temperature_vacation
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data: 
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  swing_mode: "vertical"
+
     # Scénario Hiver/Automne
     - conditions:
         - condition: or
@@ -142,7 +215,7 @@ action:
                 data:
                   swing_mode: "vertical"
 
-    # Scénario Été/printemps
+    # Scénario Été/Printemps
     - conditions:
         - condition: or
           conditions:
@@ -212,79 +285,5 @@ action:
                   entity_id: !input climatiseur_entity
                 data:
                   hvac_mode: "off"
-
-# Mode Vacances
-    - conditions:
-        - condition: state
-          entity_id: !input vacation_mode
-          state: "on"
-        
-      sequence:
-        choose: 
-          # Arrêt des climatiseurs si min < température actuelle > max
-          - conditions:
-              - condition: numeric_state
-                entity_id: !input temperature_entity
-                above: !input min_temperature_vacation
-            sequence: 
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data: 
-                  hvac_mode: "off"
-
-          - conditions: 
-              - condition: numeric_state
-                entity_id: !input temperature_entity
-                below: !input max_temperature_vacation
-            sequence: 
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data: 
-                  hvac_mode: "off"
-
-          # Démarre en dehors des conditions précédentes
-          - conditions:
-              - condition: numeric_state
-                entity_id: !input temperature_entity
-                above: !input max_temperature_vacation
-            sequence: 
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data: 
-                  hvac_mode: cool
-              - service: climate.set_fan_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  swing_mode: "auto"
-              - service: climate.set_swing_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  swing_mode: "vertical"
-
-          - conditions:
-              - condition: numeric_state
-                entity_id: !input temperature_entity
-                below: !input min_temperature_vacation
-            sequence: 
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data: 
-                  hvac_mode: heat
-              - service: climate.set_fan_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  swing_mode: "auto"
-              - service: climate.set_swing_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  swing_mode: "vertical"
 
 mode: single
