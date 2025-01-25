@@ -38,8 +38,18 @@ blueprint:
       selector:
         entity:
           domain: sensor
+    min_temperature_vacation:
+      name: Température minimale tolérée en Mode Vacances
+      selector:
+        entity:
+          domain: sensor
     max_temperature:
       name: Température maximale tolérée 
+      selector:
+        entity:
+          domain: sensor
+    max_temperature_vacation:
+      name: Température minimale tolérée en Mode Vacances
       selector:
         entity:
           domain: sensor
@@ -218,7 +228,7 @@ action:
           - conditions:
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                above: !input min_temperature_vacances
+                above: !input min_temperature_vacation
             sequence: 
               - service: climate.set_hvac_mode
                 target:
@@ -229,7 +239,7 @@ action:
           - conditions: 
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                below: !input max_temperature_vacances
+                below: !input max_temperature_vacation
             sequence: 
               - service: climate.set_hvac_mode
                 target:
@@ -241,7 +251,7 @@ action:
           - conditions:
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                above: !input max_temperature_vacances
+                above: !input max_temperature_vacation
             sequence: 
               - service: climate.set_hvac_mode
                 target:
@@ -262,7 +272,7 @@ action:
           - conditions:
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                below: !input min_temperature_vacances
+                below: !input min_temperature_vacation
             sequence: 
               - service: climate.set_hvac_mode
                 target:
