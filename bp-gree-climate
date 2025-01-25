@@ -53,11 +53,6 @@ blueprint:
       selector:
         entity:
           domain: sensor
-    vacation_schedule:
-      name: Heure de retour programmée
-      selector:
-        entity:
-          domain: schedule
     vacation_mode:
       name: ON/OFF du mode vacances
       selector:
@@ -71,6 +66,8 @@ trigger:
     entity_id: !input schedule_entity
   - platform: time_pattern
     minutes: "/15"
+  - platform: state
+    entity_id: !input vacation_mode
 
 action:
   choose:
