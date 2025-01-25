@@ -38,8 +38,18 @@ blueprint:
       selector:
         entity:
           domain: sensor
-    max_temperature:
+    min_temperature:
+      name: Température minimale tolérée en Mode Vacances
+      selector:
+        entity:
+          domain: sensor
+    max_temperature_vacation:
       name: Température maximale tolérée 
+      selector:
+        entity:
+          domain: sensor
+    max_temperature_vacation:
+      name: Température minimale tolérée en Mode Vacances
       selector:
         entity:
           domain: sensor
