@@ -1,3 +1,99 @@
+blueprint:
+  name: Gestion automatique du climatiseur avec seuil de température
+  description: Un blueprint pour ajuster automatiquement un climatiseur en fonction de la température mesurée.
+  domain: automation
+  input:
+    temperature_entity:
+      name: Capteur de température 
+      selector:
+        entity:
+          domain: sensor
+    climatiseur_entity:
+      name: Entité du climatiseur
+      selector:
+        entity:
+          domain: climate
+    current_season:
+      name: Input text de la saison actuelle
+      selector:
+        entity:
+          domain: input_text
+    schedule_jour:
+      name: Planning d'automatisation jour
+      selector:
+        entity:
+          domain: schedule
+    schedule_nuit:
+      name: Planning d'automatisation night
+      selector:
+        entity:
+          domain: schedule
+    ext_temperature:
+      name: Température extérieure
+      selector:
+        entity:
+          domain: sensor
+    temp_cible:
+      name: Température cible
+      selector: 
+        entity: 
+          domain: sensor
+    min_temperature:
+      name: Température minimale tolérée
+      selector:
+        entity:
+          domain: sensor
+    max_temperature:
+      name: Température maximale tolérée 
+      selector:
+        entity:
+          domain: sensor
+    temp_cible_nuit:
+      name: Température de nuit
+      selector:
+        entity:
+          domain: sensor
+    temp_min_nuit:
+      name: Température minimale tolérée
+      selector:
+        entity:
+          domain: sensor
+    temp_max_nuit:
+      name: Température maximale tolérée 
+      selector:
+        entity:
+          domain: sensor
+    vacation_mode:
+      name: ON/OFF du mode vacances
+      selector:
+        entity:
+          domain: input_boolean
+    min_temperature_vacation:
+      name: Température minimale tolérée en Mode Vacances
+      selector:
+        entity:
+          domain: sensor
+    max_temperature_vacation:
+      name: Température minimale tolérée en Mode Vacances
+      selector:
+        entity:
+          domain: sensor
+    
+trigger:
+  - platform: time_pattern
+    minutes: "/15"
+  - platform: state 
+    entity_id: !input temperature_cible
+  - platform: state 
+    entity_id: !input temperature_entity
+    delay: "00:02:00"
+  - platform: state 
+    entity_id: !input schedule_day
+  - platform: state 
+    entity_id: !input schedule_night
+  - platform: state
+    entity_id: !input vacation_mode
+
 action:
   choose:
     # Mode Vacances (prioritaire)
@@ -83,6 +179,11 @@ action:
             - condition: state
               entity_id: !input current_season
               state: "Automne"
+        - condition: and
+          conditions: 
+            - condition: state
+              entity_id: !input vacation_mode
+              state: "off"
       sequence:
         choose:
           # Température actuelle supérieure à la tolérance
@@ -144,6 +245,50 @@ action:
                 data:
                   swing_mode: "vertical"
 
+          # Mode nuit
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input schedule_nuit
+                state: "on"
+            conditions:
+              - condition: state
+                entity_id: !input schedule_nuit_weekend
+                state: "on"
+          - condition: and
+            conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                above: !input temp_nuit
+          sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: "off"
+
+          # Température actuelle inférieure à la tolérance
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input temp_nuit
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  swing_mode: "vertical"
+
     # Scénario Été/Printemps
     - conditions:
         - condition: or
@@ -154,6 +299,11 @@ action:
             - condition: state
               entity_id: !input current_season
               state: "Printemps"
+        - condition: and
+          conditions: 
+            - condition: state
+              entity_id: !input vacation_mode
+              state: "off"
       sequence:
         choose:
           # Température actuelle supérieure à la tolérance
