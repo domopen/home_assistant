@@ -18,12 +18,12 @@ blueprint:
       selector:
         entity:
           domain: input_text
-    schedule_jour:
+    schedule_nuit_semaine:
       name: Planning d'automatisation jour
       selector:
         entity:
           domain: schedule
-    schedule_nuit:
+    schedule_nuit_weekend:
       name: Planning d'automatisation night
       selector:
         entity:
@@ -53,12 +53,12 @@ blueprint:
       selector:
         entity:
           domain: sensor
-    temp_min_nuit:
+    min_temp_nuit:
       name: Température minimale tolérée
       selector:
         entity:
           domain: sensor
-    temp_max_nuit:
+    max_temp_nuit:
       name: Température maximale tolérée 
       selector:
         entity:
@@ -85,12 +85,9 @@ trigger:
   - platform: state 
     entity_id: !input temperature_cible
   - platform: state 
-    entity_id: !input temperature_entity
-    delay: "00:02:00"
+    entity_id: !input schedule_semaine_nuit
   - platform: state 
-    entity_id: !input schedule_day
-  - platform: state 
-    entity_id: !input schedule_night
+    entity_id: !input schedule_weekend_nuit
   - platform: state
     entity_id: !input vacation_mode
 
@@ -245,11 +242,39 @@ action:
                 data:
                   swing_mode: "vertical"
 
-          # Température actuelle inférieure à la tolérance
+          # Mode nuit - Température actuelle supérieure aux tolérances
           - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input schedule_nuit_semaine
+                    state: "on"
+                  - condition: state
+                    entity_id: !input schedule_nuit_weekend
+                    state: "on"
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                below: !input temp_nuit
+                above: !input max_temp_nuit
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: "off"
+
+          # Mode nuit - Température actuelle inférieures aux tolérances
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input schedule_nuit_semaine
+                    state: "on"
+                  - condition: state
+                    entity_id: !input schedule_nuit_weekend
+                    state: "on"
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input temp_nuit_min
             sequence:
               - service: climate.set_hvac_mode
                 target:
@@ -267,27 +292,30 @@ action:
                 data:
                   swing_mode: "vertical"
 
-          # Mode nuit
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: !input schedule_nuit
-                state: "on"
-            conditions:
-              - condition: state
-                entity_id: !input schedule_nuit_weekend
-                state: "on"
-          - condition: and
-            conditions:
+          # Mode nuit - Température actuelle dans les tolérances
+          - conditions:
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                above: !input temp_nuit
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                above: !input min_temp_nuit
             sequence:
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
                 data:
-                  hvac_mode: "off"
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  swing_mode: "vertical"
 
     # Scénario Été/Printemps
     - conditions:
@@ -328,6 +356,18 @@ action:
                 data:
                   swing_mode: "vertical"
 
+          # Température actuelle inférieure à la tolérance
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input min_temperature
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: "off"
+
           # Température cible dans les tolérances 
           - conditions:
               - condition: numeric_state
@@ -352,17 +392,80 @@ action:
                   entity_id: !input climatiseur_entity
                 data:
                   swing_mode: "vertical"
-
-          # Température actuelle inférieure à la tolérance
+    
+          # Mode nuit - Température actuelle inférieure aux tolérances
           - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input schedule_nuit_semaine
+                    state: "on"
+                  - condition: state
+                    entity_id: !input schedule_nuit_weekend
+                    state: "on"
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                below: !input min_temperature
+                above: !input max_temp_nuit
             sequence:
               - service: climate.set_hvac_mode
                 target:
                   entity_id: !input climatiseur_entity
                 data:
                   hvac_mode: "off"
+
+          # Mode nuit - Température actuelle superieure aux tolérances
+          - conditions:
+              - condition: or
+                conditions:
+                  - condition: state
+                    entity_id: !input schedule_nuit_semaine
+                    state: "on"
+                  - condition: state
+                    entity_id: !input schedule_nuit_weekend
+                    state: "on"
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input temp_nuit_min
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  swing_mode: "vertical"
+
+          # Mode nuit - Température actuelle dans les tolérances
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                above: !input min_temp_nuit
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  swing_mode: "vertical"
 
 mode: single
