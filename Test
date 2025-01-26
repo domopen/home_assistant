@@ -38,8 +38,8 @@ blueprint:
       selector:
         entity:
           domain: sensor
-              nuit_semaine:
-    name: Planning d'automatisation jour
+    nuit_semaine:
+      name: Planning d'automatisation jour
       selector:
         entity:
           domain: schedule
