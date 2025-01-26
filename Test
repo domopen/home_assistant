@@ -245,28 +245,6 @@ action:
                 data:
                   swing_mode: "vertical"
 
-          # Mode nuit
-          - condition: or
-            conditions:
-              - condition: state
-                entity_id: !input schedule_nuit
-                state: "on"
-            conditions:
-              - condition: state
-                entity_id: !input schedule_nuit_weekend
-                state: "on"
-          - condition: and
-            conditions:
-              - condition: numeric_state
-                entity_id: !input temperature_entity
-                above: !input temp_nuit
-          sequence:
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input climatiseur_entity
-                data:
-                  hvac_mode: "off"
-
           # Température actuelle inférieure à la tolérance
           - conditions:
               - condition: numeric_state
@@ -288,6 +266,28 @@ action:
                   entity_id: !input climatiseur_entity
                 data:
                   swing_mode: "vertical"
+
+          # Mode nuit
+          - condition: or
+            conditions:
+              - condition: state
+                entity_id: !input schedule_nuit
+                state: "on"
+            conditions:
+              - condition: state
+                entity_id: !input schedule_nuit_weekend
+                state: "on"
+          - condition: and
+            conditions:
+              - condition: numeric_state
+                entity_id: !input temperature_entity
+                above: !input temp_nuit
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input climatiseur_entity
+                data:
+                  hvac_mode: "off"
 
     # Scénario Été/Printemps
     - conditions:
