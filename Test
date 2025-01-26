@@ -18,16 +18,6 @@ blueprint:
       selector:
         entity:
           domain: input_text
-    schedule_nuit_semaine:
-      name: Planning d'automatisation jour
-      selector:
-        entity:
-          domain: schedule
-    schedule_nuit_weekend:
-      name: Planning d'automatisation night
-      selector:
-        entity:
-          domain: schedule
     ext_temperature:
       name: Température extérieure
       selector:
@@ -48,6 +38,16 @@ blueprint:
       selector:
         entity:
           domain: sensor
+              nuit_semaine:
+    name: Planning d'automatisation jour
+      selector:
+        entity:
+          domain: schedule
+    nuit_weekend:
+      name: Planning d'automatisation night
+      selector:
+        entity:
+          domain: schedule
     temp_cible_nuit:
       name: Température de nuit
       selector:
