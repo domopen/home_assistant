@@ -85,9 +85,9 @@ trigger:
   - platform: state 
     entity_id: !input temp_cible
   - platform: state 
-    entity_id: !input semaine_nuit
+    entity_id: !input nuit_semaine
   - platform: state 
-    entity_id: !input weekend_nuit
+    entity_id: !input nuit_weekend
   - platform: state
     entity_id: !input vacation_mode
 
@@ -274,7 +274,7 @@ action:
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temp_entity
-                below: !input temp_nuit_min
+                below: !input min_temp_nuit
             sequence:
               - service: climate.set_hvac_mode
                 target:
