@@ -83,11 +83,11 @@ trigger:
   - platform: time_pattern
     minutes: "/15"
   - platform: state 
-    entity_id: !input temperature_cible
+    entity_id: !input temp_cible
   - platform: state 
-    entity_id: !input schedule_semaine_nuit
+    entity_id: !input semaine_nuit
   - platform: state 
-    entity_id: !input schedule_weekend_nuit
+    entity_id: !input weekend_nuit
   - platform: state
     entity_id: !input vacation_mode
 
@@ -267,10 +267,10 @@ action:
               - condition: or
                 conditions:
                   - condition: state
-                    entity_id: !input schedule_nuit_semaine
+                    entity_id: !input nuit_semaine
                     state: "on"
                   - condition: state
-                    entity_id: !input schedule_nuit_weekend
+                    entity_id: !input nuit_weekend
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temperature_entity
@@ -398,14 +398,14 @@ action:
               - condition: or
                 conditions:
                   - condition: state
-                    entity_id: !input schedule_nuit_semaine
+                    entity_id: !input nuit_semaine
                     state: "on"
                   - condition: state
-                    entity_id: !input schedule_nuit_weekend
+                    entity_id: !input nuit_weekend
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                above: !input max_temp_nuit
+                below: !input min_temp_nuit
             sequence:
               - service: climate.set_hvac_mode
                 target:
@@ -418,14 +418,14 @@ action:
               - condition: or
                 conditions:
                   - condition: state
-                    entity_id: !input schedule_nuit_semaine
+                    entity_id: !input nuit_semaine
                     state: "on"
                   - condition: state
-                    entity_id: !input schedule_nuit_weekend
+                    entity_id: !input nuit_weekend
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temperature_entity
-                below: !input temp_nuit_min
+                above: !input max_temp_nuit
             sequence:
               - service: climate.set_hvac_mode
                 target:
