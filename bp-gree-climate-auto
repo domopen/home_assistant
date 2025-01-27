@@ -190,7 +190,7 @@ action:
                 entity_id: !input temp_actuelle
                 above: !input max_temp
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 above: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
