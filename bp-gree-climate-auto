@@ -96,7 +96,7 @@ blueprint:
           domain: sensor
 
 trigger:
-  - platform: time
+  - platform: time_pattern
     minutes: "/15"
   - platform: state 
     entity_id: !input temp_cible
