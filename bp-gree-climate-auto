@@ -97,7 +97,7 @@ blueprint:
 
 trigger:
   - platform: time
-    minutes: /15
+    minutes: "/15"
   - platform: state 
     entity_id: !input temp_cible
   - platform: state
