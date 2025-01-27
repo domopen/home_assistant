@@ -203,7 +203,7 @@ action:
                 data:
                   hvac_mode: "off"
 
-          # Mode nuit - Température actuelle actuelle supérieure à la température cible et supérieure à la température extérieure
+          # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
           - conditions:
               - condition: or
                 conditions:
@@ -217,7 +217,7 @@ action:
                 entity_id: !input temp_actuelle
                 above: !input max_temp_nuit
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 above: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -232,7 +232,7 @@ action:
                 entity_id: !input temp_actuelle
                 below: !input min_temp
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 above: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -251,7 +251,7 @@ action:
                 data:
                   swing_mode: "vertical"
 
-          # Mode nuit - Température actuelle actuelle inférieure à la température cible et supérieure à la température extérieure
+          # Mode nuit - Température actuelle inférieure à la température cible et supérieure à la température extérieure
           - conditions:
               - condition: or
                 conditions:
@@ -263,9 +263,9 @@ action:
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temp_actuelle
-                above: !input max_temp_nuit
+                below: !input min_temp_nuit
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 above: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -324,9 +324,12 @@ action:
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temp_actuelle
-                above: !input max_temp_nuit
+                above: !input min_temp_nuit
               - condition: numeric_state
                 entity_id: !input temp_actuelle
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
                 above: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -351,7 +354,7 @@ action:
                 entity_id: !input temp_actuelle
                 above: !input max_temp
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 above: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -384,7 +387,7 @@ action:
                 entity_id: !input temp_actuelle
                 above: !input max_temp_nuit
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 above: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -409,7 +412,7 @@ action:
                 entity_id: !input temp_actuelle
                 below: !input min_temp
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 below: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -430,9 +433,9 @@ action:
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temp_actuelle
-                above: !input max_temp_nuit
+                below: !input min_temp_nuit
               - condition: numeric_state
-                entity_id: !input temp_actuelle
+                entity_id: !input temp_cible
                 below: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
@@ -481,9 +484,12 @@ action:
                     state: "on"
               - condition: numeric_state
                 entity_id: !input temp_actuelle
-                above: !input max_temp_nuit
+                above: !input min_temp_nuit
               - condition: numeric_state
                 entity_id: !input temp_actuelle
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
                 below: !input temp_ext
             sequence:
               - service: climate.set_hvac_mode
