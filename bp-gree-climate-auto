@@ -97,11 +97,7 @@ blueprint:
 
 trigger:
   - platform: time_pattern
-    minutes: "/15"
-  - platform: state 
-    entity_id: !input temp_cible
-  - platform: state
-    entity_id: !input temp_cible_nuit
+    minutes: "/5"
   - platform: state 
     entity_id: !input nuit_semaine
   - platform: state 
