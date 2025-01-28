@@ -91,67 +91,51 @@ trigger:
 condition: []
 
 action:
+  - service: script.turn_on
+    target:
+      entity_id: !input script_1
+  - service: script.turn_on
+    target:
+      entity_id: !input script_2
   - choose:
-      - conditions:
-          - "{{ script_1 is defined }}"
-        sequence:
-          - service: script.turn_on
-            target:
-              entity_id: !input script_1
-      - conditions:
-          - "{{ script_2 is defined }}"
-        sequence:
-          - service: script.turn_on
-            target:
-              entity_id: !input script_2
-      - conditions:
-          - "{{ script_3 is defined and script_3 != '' }}"
+      - conditions: "{{ script_3 is defined and script_3 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_3
-      - conditions:
-          - "{{ script_4 is defined and script_4 != '' }}"
+      - conditions: "{{ script_4 is defined and script_4 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_4
-      - conditions:
-          - "{{ script_5 is defined and script_5 != '' }}"
+      - conditions: "{{ script_5 is defined and script_5 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_5
-      - conditions:
-          - "{{ script_6 is defined and script_6 != '' }}"
+      - conditions: "{{ script_6 is defined and script_6 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_6
-      - conditions:
-          - "{{ script_7 is defined and script_7 != '' }}"
+      - conditions: "{{ script_7 is defined and script_7 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_7
-      - conditions:
-          - "{{ script_8 is defined and script_8 != '' }}"
+      - conditions: "{{ script_8 is defined and script_8 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_8
-      - conditions:
-          - "{{ script_9 is defined and script_9 != '' }}"
+      - conditions: "{{ script_9 is defined and script_9 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_9
-      - conditions:
-          - "{{ script_10 is defined and script_10 != '' }}"
+      - conditions: "{{ script_10 is defined and script_10 != [] }}"
         sequence:
           - service: script.turn_on
             target:
               entity_id: !input script_10
-    default: []
 mode: single
-
