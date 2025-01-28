@@ -1,23 +1,19 @@
-alias: Alerte niveau d'encre faible
+ialias: Alerte niveau d'encre faible
 description: Alerte les utilisateurs lorsque le niveau d'encre tombe en dessous de 30%.
 triggers:
-  - entity_id: sensor._cyan
+  - entity_id: sensor.(entité_de_la_machine_et_couleur_cible)
     below: 30
     for: "00:05:00"
     trigger: numeric_state
-  - entity_id: sensor._yellow
+  - entity_id: sensor.(entité_de_la_machine_et_couleur_cible)
     below: 30
     for: "00:05:00"
     trigger: numeric_state
-  - entity_id: sensor._magenta
+  - entity_id: sensor.(entité_de_la_machine_et_couleur_cible)
     below: 30
     for: "00:05:00"
     trigger: numeric_state
-  - entity_id: sensor._black_pgbk
-    below: 30
-    for: "00:05:00"
-    trigger: numeric_state
-  - entity_id: sensor._black_bk
+  - entity_id: sensor.(entité_de_la_machine_et_couleur_cible)
     below: 30
     for: "00:05:00"
     trigger: numeric_state
