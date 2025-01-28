@@ -1,1 +1,157 @@
+blueprint:
+  name: Mise à jour des données climat
+  description: Collecte les données des capteurs de température à intervalles réguliers en déclenchant des scripts définis.
+  domain: automation
+  input:
+    interval_minutes:
+      name: Intervalle (en minutes)
+      description: Intervalle en minutes entre chaque exécution.
+      default: 5
+    script_1:
+      name: Script obligatoire 1
+      description: Premier script à exécuter.
+      selector:
+        entity:
+          domain: script
+    script_2:
+      name: Script obligatoire 2
+      description: Deuxième script à exécuter.
+      selector:
+        entity:
+          domain: script
+    script_3:
+      name: Script optionnel 3
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+    script_4:
+      name: Script optionnel 4
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+    script_5:
+      name: Script optionnel 5
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+    script_6:
+      name: Script optionnel 6
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+    script_7:
+      name: Script optionnel 7
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+    script_8:
+      name: Script optionnel 8
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+    script_9:
+      name: Script optionnel 9
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+    script_10:
+      name: Script optionnel 10
+      description: Script supplémentaire à exécuter (facultatif).
+      default: []
+      selector:
+        entity:
+          domain: script
+          multiple: false
+
+trigger:
+  - platform: time_pattern
+    minutes: !input interval_minutes
+
+condition: []
+
+action:
+  - choose:
+      - conditions:
+          - "{{ script_1 is defined }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_1
+      - conditions:
+          - "{{ script_2 is defined }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_2
+      - conditions:
+          - "{{ script_3 is defined and script_3 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_3
+      - conditions:
+          - "{{ script_4 is defined and script_4 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_4
+      - conditions:
+          - "{{ script_5 is defined and script_5 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_5
+      - conditions:
+          - "{{ script_6 is defined and script_6 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_6
+      - conditions:
+          - "{{ script_7 is defined and script_7 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_7
+      - conditions:
+          - "{{ script_8 is defined and script_8 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_8
+      - conditions:
+          - "{{ script_9 is defined and script_9 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_9
+      - conditions:
+          - "{{ script_10 is defined and script_10 != '' }}"
+        sequence:
+          - service: script.turn_on
+            target:
+              entity_id: !input script_10
+    default: []
+mode: single
 
