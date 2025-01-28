@@ -10,18 +10,6 @@ actions:
     action: script.turn_on
     data: {}
   - target:
-      entity_id: script.captation_piece_
-    action: script.turn_on
-    data: {}
-  - target:
-      entity_id: script.captation_piece_
-    action: script.turn_on
-    data: {}
-  - target:
-      entity_id: script.captation_piece_
-    action: script.turn_on
-    data: {}
-  - target:
       entity_id: script.captation_exterieur
     action: script.turn_on
     data: {}
