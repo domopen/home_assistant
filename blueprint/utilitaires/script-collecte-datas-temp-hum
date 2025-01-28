@@ -1,0 +1,28 @@
+alias: captation_
+sequence:
+  - alias: Collecte des données du capteur température
+    data_template:
+      level: info
+      message: >-
+        Données collectées : Température : {{
+        states('sensor._temperature') }} °C
+    action: system_log.write
+  - alias: Collecte des données du capteur humidité
+    data_template:
+      level: info
+      message: >-
+        Données collectées : Humidité : {{
+        states('sensor._humidity') }} %
+    action: system_log.write
+  - alias: Enregistrement des données dans une variable
+    data:
+      entity_id: input_number.temperature_
+      value: "{{ states('sensor._temperature') | float }}"
+    action: input_number.set_value
+  - alias: Enregistrement des données dans une variable
+    data:
+      entity_id: input_number.humidite_
+      value: "{{ states('sensor._humidity') | float }}"
+    action: input_number.set_value
+mode: restart
+description: ""
