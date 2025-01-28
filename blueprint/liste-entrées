@@ -1,5 +1,4 @@
-Liste des Entrées Home Assistant
-
+-----------------------------------
 Capteurs
 
 input_number.temperature_(pièce)
