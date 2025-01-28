@@ -1,0 +1,79 @@
+# 📌 Liste des Entrées Home Assistant
+
+## 📌 Mode Vacances (`mode_vacances`)
+| Nom | Type | ID |
+|------|------|------|
+| ⏳ Retour de vacances | `input_datetime` | `input_datetime.retour_de_vacances` |
+| 🏖️ Mode Vacances | `input_boolean` | `input_boolean.mode_vacances` |
+| ❄️ Température min vacances | `input_number` | `input_number.min_temp_vacances` |
+| 🔥 Température max vacances | `input_number` | `input_number.max_temp_vacances` |
+| 📊 Température min vacances (capteurs combinés) | `sensor` | `sensor.min_temp_vacances` |
+| 📊 Température max vacances (capteurs combinés) | `sensor` | `sensor.max_temp_vacances` |
+
+---
+
+## 🌙 Gestion Nuit (`gestion_nuit`)
+| Nom | Type | ID |
+|------|------|------|
+| 🌡 Température seuil min nuit pièce 1 | `sensor` | `sensor.temp_seuil_min_nuit_p1` |
+| 🌡 Température seuil min nuit pièce 2 | `sensor` | `sensor.temp_seuil_min_nuit_p2` |
+| 🌡 Température seuil min nuit pièce 3 | `sensor` | `sensor.temp_seuil_min_nuit_p3` |
+| 🌡 Température seuil max nuit pièce 1 | `sensor` | `sensor.temp_seuil_max_nuit_p1` |
+| 🌡 Température seuil max nuit pièce 2 | `sensor` | `sensor.temp_seuil_max_nuit_p2` |
+| 🌡 Température seuil max nuit pièce 3 | `sensor` | `sensor.temp_seuil_max_nuit_p3` |
+| 🎯 Température cible nuit pièce 1 | `input_number` | `input_number.temp_cible_nuit_p1` |
+| 🎯 Température cible nuit pièce 2 | `input_number` | `input_number.temp_cible_nuit_p2` |
+| 🎯 Température cible nuit pièce 3 | `input_number` | `input_number.temp_cible_nuit_p3` |
+| 🌡 Température cible nuit pièce 1 (capteurs combinés) | `sensor` | `sensor.temp_cible_nuit_p1` |
+| 🌡 Température cible nuit pièce 2 (capteurs combinés) | `sensor` | `sensor.temp_cible_nuit_p2` |
+| 🌙 Mode Nuit | `input_boolean` | `input_boolean.mode_nuit` |
+
+---
+
+## ⏳ Gestion Temporelle (`gestion_temporelle`)
+| Nom | Type | ID |
+|------|------|------|
+| 🌙 Nuit | `schedule` | `schedule.nuit` |
+| 📅 Mise à jour saison | `input_text` | `input_text.maj_saison` |
+
+---
+
+## 🌡 Gestion du Climat (`gestion_du_climat`)
+| Nom | Type | ID |
+|------|------|------|
+| 🌡 Température moyenne | `sensor` | `sensor.temp_moyenne` |
+| ❄️ Température seuil min pièce 1 | `sensor` | `sensor.temp_seuil_min_p1` |
+| ❄️ Température seuil min pièce 2 | `sensor` | `sensor.temp_seuil_min_p2` |
+| ❄️ Température seuil min pièce 3 | `sensor` | `sensor.temp_seuil_min_p3` |
+| 🔥 Température seuil max pièce 1 | `sensor` | `sensor.temp_seuil_max_p1` |
+| 🔥 Température seuil max pièce 2 | `sensor` | `sensor.temp_seuil_max_p2` |
+| 🔥 Température seuil max pièce 3 | `sensor` | `sensor.temp_seuil_max_p3` |
+| 🌍 Température extérieure | `sensor` | `sensor.temp_exterieure` |
+| 🎯 Température cible pièce 1 | `input_number` | `input_number.temp_cible_p1` |
+| 🎯 Température cible pièce 2 | `input_number` | `input_number.temp_cible_p2` |
+| 🎯 Température cible pièce 3 | `input_number` | `input_number.temp_cible_p3` |
+| 📊 Température actuelle pièce 1 | `sensor` | `sensor.temp_actuelle_p1` |
+| 📊 Température actuelle pièce 2 | `sensor` | `sensor.temp_actuelle_p2` |
+| 📊 Température actuelle pièce 3 | `sensor` | `sensor.temp_actuelle_p3` |
+| 📊 Température actuelle pièce 4 | `sensor` | `sensor.temp_actuelle_p4` |
+| ⚙️ Hystérésis | `input_number` | `input_number.t_seuil_de_tolerance` |
+| 💧 Humidité pièce 1 | `sensor` | `sensor.humidite_p1` |
+| 💧 Humidité pièce 2 | `sensor` | `sensor.humidite_p2` |
+| 💧 Humidité moyenne | `sensor` | `sensor.humidite_moyenne` |
+
+---
+
+## 🔍 Capteurs (`capteurs`)
+| Nom | Type | ID |
+|------|------|------|
+| 🌡 Température pièce 1 | `input_number` | `input_number.temperature_p1` |
+| 🌍 Température extérieure | `input_number` | `input_number.temperature_ext` |
+| 🌡 Température pièce 2 | `input_number` | `input_number.temperature_p2` |
+| 🌡 Température pièce 3 | `input_number` | `input_number.temperature_p3` |
+| 🌡 Température pièce 4 | `input_number` | `input_number.temperature_p4` |
+| 💧 Humidité pièce 1 | `input_number` | `input_number.humidite_p1` |
+| 💧 Humidité extérieure | `input_number` | `input_number.humidite_exterieure` |
+| 💧 Humidité pièce 2 | `input_number` | `input_number.humidite_p2` |
+| 💧 Humidité pièce 3 | `input_number` | `input_number.humidite_p3` |
+| 💧 Humidité pièce 4 | `input_number` | `input_number.humidite_p4` |
+
