@@ -5,12 +5,12 @@ description: >-
   mode nuit est activé.
 triggers:
   - entity_id:
-      - input_number.temp_cible_salon
-      - input_number.temp_cible_bureau
-      - input_number.temp_cible_chambre
-      - input_number.temp_cible_nuit_salon
-      - input_number.temp_cible_nuit_bureau
-      - input_number.temp_cible_nuit_chambre
+      - input_number.temp_cible_
+      - input_number.temp_cible_
+      - input_number.temp_cible_
+      - input_number.temp_cible_nuit_
+      - input_number.temp_cible_nuit_
+      - input_number.temp_cible_nuit_
     trigger: state
   - minutes: /15
     trigger: time_pattern
@@ -23,19 +23,19 @@ actions:
             state: "on"
         sequence:
           - target:
-              entity_id: climate.c66cdc1f
+              entity_id: climate.
             data:
-              temperature: "{{ states('input_number.temp_cible_nuit_salon') | float }}"
+              temperature: "{{ states('input_number.temp_cible_nuit_') | float }}"
             action: climate.set_temperature
           - target:
-              entity_id: climate.c66fdab5
+              entity_id: climate.
             data:
-              temperature: "{{ states('input_number.temp_cible_nuit_bureau') | float }}"
+              temperature: "{{ states('input_number.temp_cible_nuit_') | float }}"
             action: climate.set_temperature
           - target:
-              entity_id: climate.c66feb74
+              entity_id: climate.
             data:
-              temperature: "{{ states('input_number.temp_cible_nuit_chambre') | float }}"
+              temperature: "{{ states('input_number.temp_cible_nuit_') | float }}"
             action: climate.set_temperature
       - conditions:
           - condition: state
@@ -43,18 +43,18 @@ actions:
             state: "off"
         sequence:
           - target:
-              entity_id: climate.c66cdc1f
+              entity_id: climate.
             data:
-              temperature: "{{ states('input_number.temp_cible_salon') | float }}"
+              temperature: "{{ states('input_number.temp_cible_') | float }}"
             action: climate.set_temperature
           - target:
-              entity_id: climate.c66fdab5
+              entity_id: climate.
             data:
-              temperature: "{{ states('input_number.temp_cible_bureau') | float }}"
+              temperature: "{{ states('input_number.temp_cible_') | float }}"
             action: climate.set_temperature
           - target:
-              entity_id: climate.c66feb74
+              entity_id: climate.
             data:
-              temperature: "{{ states('input_number.temp_cible_chambre') | float }}"
+              temperature: "{{ states('input_number.temp_cible_') | float }}"
             action: climate.set_temperature
 mode: single
