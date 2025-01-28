@@ -6,10 +6,6 @@ description: >-
 triggers:
   - entity_id:
       - input_number.temp_cible_
-      - input_number.temp_cible_
-      - input_number.temp_cible_
-      - input_number.temp_cible_nuit_
-      - input_number.temp_cible_nuit_
       - input_number.temp_cible_nuit_
     trigger: state
   - minutes: /15
@@ -27,31 +23,11 @@ actions:
             data:
               temperature: "{{ states('input_number.temp_cible_nuit_') | float }}"
             action: climate.set_temperature
-          - target:
-              entity_id: climate.
-            data:
-              temperature: "{{ states('input_number.temp_cible_nuit_') | float }}"
-            action: climate.set_temperature
-          - target:
-              entity_id: climate.
-            data:
-              temperature: "{{ states('input_number.temp_cible_nuit_') | float }}"
-            action: climate.set_temperature
       - conditions:
           - condition: state
             entity_id: input_boolean.mode_nuit
             state: "off"
         sequence:
-          - target:
-              entity_id: climate.
-            data:
-              temperature: "{{ states('input_number.temp_cible_') | float }}"
-            action: climate.set_temperature
-          - target:
-              entity_id: climate.
-            data:
-              temperature: "{{ states('input_number.temp_cible_') | float }}"
-            action: climate.set_temperature
           - target:
               entity_id: climate.
             data:
