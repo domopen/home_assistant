@@ -1,9 +1,13 @@
-Bienvenue sur le GitHub de domOpen
-Ce dépôt officiel de domOpen regroupe nos ressources et outils liés à la domotique. Vous y trouverez :
+🏠 Bienvenue chez domOpen
+🌟 Transformez votre maison en un espace intelligent, sécurisé et personnalisé.
+Ce dépôt contient tout ce dont vous avez besoin pour optimiser votre domotique grâce à Home Assistant.
 
-Blueprints : Modèles pour simplifier et standardiser vos automatisations dans Home Assistant.
-Automatisations : Scénarios personnalisés pour améliorer le confort, la sécurité et l'efficacité énergétique.
-Scripts : Solutions modulaires pour des besoins spécifiques.
-Au fur et à mesure de la croissance de domOpen, ce dépôt s'enrichira régulièrement avec de nouvelles solutions et innovations.
-
-Nous croyons en l'open source et à la collaboration, donc n'hésitez pas à explorer, utiliser et contribuer à nos projets.
+🚀 Ce que vous trouverez ici
+🧩 Catégorie	📜 Description
+🔷 Blueprints	Modèles pour automatiser vos tâches rapidement et efficacement.
+🤖 Automatisations	Scénarios pratiques pour le confort, la sécurité et les économies d’énergie.
+⚙️ Scripts	Solutions prêtes à l’emploi pour vos besoins domotiques spécifiques.
+🎨 Pourquoi choisir domOpen ?
+💡 Innovant : Des solutions modernes et évolutives.
+🔐 Sécurisé : Respect de votre vie privée et des standards de sécurité.
+🌍 Open Source : Partagez, personnalisez et améliorez avec nous.
