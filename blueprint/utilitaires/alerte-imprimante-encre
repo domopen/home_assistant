@@ -1,0 +1,32 @@
+alias: Alerte niveau d'encre faible
+description: Alerte les utilisateurs lorsque le niveau d'encre tombe en dessous de 30%.
+triggers:
+  - entity_id: sensor._cyan
+    below: 30
+    for: "00:05:00"
+    trigger: numeric_state
+  - entity_id: sensor._yellow
+    below: 30
+    for: "00:05:00"
+    trigger: numeric_state
+  - entity_id: sensor._magenta
+    below: 30
+    for: "00:05:00"
+    trigger: numeric_state
+  - entity_id: sensor._black_pgbk
+    below: 30
+    for: "00:05:00"
+    trigger: numeric_state
+  - entity_id: sensor._black_bk
+    below: 30
+    for: "00:05:00"
+    trigger: numeric_state
+conditions: []
+actions:
+  - data:
+      title: "Alerte : Niveau d'encre faible"
+      message: >
+        L'imprimante a un niveau d'encre inférieur à 30%. Pensez à remplacer ou
+        à commander une nouvelle cartouche d'encre.
+    action: notify.notify
+mode: single
