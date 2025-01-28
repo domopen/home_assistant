@@ -20,7 +20,7 @@ Toutes nos solutions sont **100% open source**, libres d'utilisation et amélior
 ## 🌍 **Pourquoi choisir domOpen ?**  
 
 ✅ **Entreprise engagée** : Nous développons des solutions **professionnelles** et **évolutives**.  
-🔐 **Respect de la vie privée** : Nous privilégions des outils **autonomes**, sans dépendance aux clouds externes.  
+🔐 **Respect de la vie privée** : Nous privilégions des outils **autonomes**, en limitant les dépendances aux clouds externes.  
 🛠️ **Open Source & Collaboratif** : Chacun peut contribuer, améliorer et adapter nos solutions à ses besoins.  
 
 📜 **Licence** : Tous nos développements sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
