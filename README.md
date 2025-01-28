@@ -1,29 +1,43 @@
-# 🏠 Bienvenue chez domOpen  
+# 🏠 Bienvenue sur le GitHub de **domOpen**  
 
-🌟 **Transformez votre maison en un espace intelligent, sécurisé et personnalisé.**  
-Ce dépôt contient tout ce dont vous avez besoin pour optimiser votre domotique grâce à Home Assistant.
+💡 **domOpen est une entreprise spécialisée dans les solutions domotiques open source**.  
+Nous concevons et partageons des **Blueprints, automatisations et scripts** pour améliorer votre **confort, sécurité et efficacité énergétique** avec Home Assistant.  
 
----
-
-## 🚀 Ce que vous trouverez ici  
-
-- 🔷 **Blueprints** : Modèles pour automatiser vos tâches rapidement et efficacement.  
-- 🤖 **Automatisations** : Scénarios pratiques pour le confort, la sécurité et les économies d’énergie.  
-- ⚙️ **Scripts** : Solutions prêtes à l’emploi pour vos besoins domotiques spécifiques.  
+Notre engagement ? **Offrir des solutions évolutives, accessibles et respectueuses de la vie privée.**  
 
 ---
 
-## 🎯 Pourquoi choisir domOpen ?  
+## 🚀 **Ce que vous trouverez ici**  
 
-✅ **Innovant** : Des solutions modernes et évolutives.  
-🔒 **Sécurisé** : Respect de votre vie privée et des standards de sécurité.  
-🌍 **Open Source** : Partagez, personnalisez et améliorez avec nous.  
+🔹 **Blueprints** → Modèles prédéfinis pour automatiser vos équipements en quelques clics.  
+🔸 **Automatisations** → Scénarios avancés pour gérer votre habitat de manière intelligente.  
+🔹 **Scripts** → Outils spécifiques pour optimiser votre installation domotique.  
+
+Toutes nos solutions sont **100% open source**, libres d'utilisation et améliorables par la communauté.  
 
 ---
 
-## 🤝 **Comment Contribuer ?**  
-1. **Forkez** ce dépôt.  
-2. **Proposez vos améliorations** via une Pull Request.  
-3. **Rejoignez la communauté** pour façonner l’avenir de la domotique.
+## 🌍 **Pourquoi choisir domOpen ?**  
+
+✅ **Entreprise engagée** : Nous développons des solutions **professionnelles** et **évolutives**.  
+🔐 **Respect de la vie privée** : Nous privilégions des outils **autonomes**, sans dépendance aux clouds externes.  
+🛠️ **Open Source & Collaboratif** : Chacun peut contribuer, améliorer et adapter nos solutions à ses besoins.  
+
+📜 **Licence** : Tous nos développements sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
+
+---
+
+
+📢 **Rejoignez-nous** : Nous partageons régulièrement de nouvelles automatisations et améliorations.  
+
+---
+
+## 📥 **Comment Contribuer ?**  
+
+1️⃣ **Forkez** ce dépôt et testez nos solutions.  
+2️⃣ **Proposez des améliorations** via des **Pull Requests**.  
+3️⃣ **Partagez vos retours** pour aider la communauté à progresser.  
+
+🌎 **Ensemble, développons un écosystème domotique libre et performant !**  
 
 ---
