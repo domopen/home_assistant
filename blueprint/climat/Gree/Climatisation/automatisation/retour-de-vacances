@@ -1,0 +1,16 @@
+alias: retour_de_vacances
+triggers:
+  - value_template: >
+      {{ now().timestamp() > states('input_datetime.retour_de_vacances') |
+      as_timestamp }}
+    trigger: template
+conditions:
+  - condition: state
+    entity_id: input_boolean.mode_vacances
+    state: "on"
+actions:
+  - target:
+      entity_id: input_boolean.mode_vacances
+    action: input_boolean.turn_off
+    data: {}
+mode: single
