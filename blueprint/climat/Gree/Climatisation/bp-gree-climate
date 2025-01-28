@@ -44,18 +44,12 @@ blueprint:
           domain: sensor
 
     # --- Mode Nuit ---
-    nuit_semaine:
-      name: Planning d'automatisation nuit en semaine
-      description: Planning définissant les heures de mode nuit pour la semaine.
+    mode_nuit:
+      name: ON/OFF du mode nuit
+      description: Active ou désactive le mode nuit.
       selector:
         entity:
-          domain: schedule
-    nuit_weekend:
-      name: Planning d'automatisation nuit en weekend
-      description: Planning définissant les heures de mode nuit pour le weekend.
-      selector:
-        entity:
-          domain: schedule
+          domain: input_boolean
     temp_cible_nuit:
       name: Température de nuit
       description: Température cible pendant la nuit.
@@ -97,11 +91,9 @@ blueprint:
 
 trigger:
   - platform: time_pattern
-    minutes: "/5"
+    minutes: "/10"
   - platform: state 
-    entity_id: !input nuit_semaine
-  - platform: state 
-    entity_id: !input nuit_weekend
+    entity_id: !input mode_nuit
   - platform: state
     entity_id: !input mode_vacances
 
@@ -180,35 +172,15 @@ action:
                 data:
                   swing_mode: "vertical"
 
- # Gestion automatique par rapport à la température extérieure
-    - conditions: []
+    # Mode Nuit
+    - conditions:
+        - condition: state
+          entity_id: !input mode_nuit
+          state: "on"
       sequence:
         choose:
-          # Température actuelle supérieure à la température cible et supérieure à la température extérieure
-          - conditions:
-              - condition: numeric_state
-                entity_id: !input temp_actuelle
-                above: !input max_temp
-              - condition: numeric_state
-                entity_id: !input temp_cible
-                above: !input temp_ext
-            sequence:
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  hvac_mode: "off"
-
           # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
           - conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: !input nuit_semaine
-                    state: "on"
-                  - condition: state
-                    entity_id: !input nuit_weekend
-                    state: "on"
               - condition: numeric_state
                 entity_id: !input temp_actuelle
                 above: !input max_temp_nuit
@@ -222,11 +194,11 @@ action:
                 data:
                   hvac_mode: "off"
 
-          # Température actuelle inférieure à la température cible et supérieure à la température extérieure
+          # Mode nuit - Température actuelle inférieure à la température cible et supérieure à la température extérieure
           - conditions:
               - condition: numeric_state
                 entity_id: !input temp_actuelle
-                below: !input min_temp
+                below: !input min_temp_nuit
               - condition: numeric_state
                 entity_id: !input temp_cible
                 above: !input temp_ext
@@ -247,19 +219,126 @@ action:
                 data:
                   swing_mode: "vertical"
 
-          # Mode nuit - Température actuelle inférieure à la température cible et supérieure à la température extérieure
+          # Mode nuit - Température actuelle dans les tolérances et supérieure à la température extérieure
           - conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: !input nuit_semaine
-                    state: "on"
-                  - condition: state
-                    entity_id: !input nuit_weekend
-                    state: "on"
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input min_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
+          - conditions:
               - condition: numeric_state
                 entity_id: !input temp_actuelle
                 below: !input min_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: "off"
+
+          # Mode nuit - Température actuelle inférieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          # Mode nuit - Température actuelle dans les tolérances et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input min_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+ # Gestion automatique générale, en fonction de la température extérieure
+    - conditions: []
+      sequence:
+        choose:
+          # Température actuelle supérieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input max_temp
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: "off"
+
+          # Température actuelle inférieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input min_temp
               - condition: numeric_state
                 entity_id: !input temp_cible
                 above: !input temp_ext
@@ -308,42 +387,6 @@ action:
                 data:
                   swing_mode: "vertical"
 
-          # Mode nuit - Température actuelle dans les tolérances et supérieure à la température extérieure
-          - conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: !input nuit_semaine
-                    state: "on"
-                  - condition: state
-                    entity_id: !input nuit_weekend
-                    state: "on"
-              - condition: numeric_state
-                entity_id: !input temp_actuelle
-                above: !input min_temp_nuit
-              - condition: numeric_state
-                entity_id: !input temp_actuelle
-                below: !input max_temp_nuit
-              - condition: numeric_state
-                entity_id: !input temp_cible
-                above: !input temp_ext
-            sequence:
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  hvac_mode: heat
-              - service: climate.set_fan_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  fan_mode: "auto"
-              - service: climate.set_swing_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  swing_mode: "vertical"
-
           # Température actuelle supérieure à la température cible et supérieure à la température extérieure
           - conditions:
               - condition: numeric_state
@@ -368,40 +411,7 @@ action:
                   entity_id: !input clim_cible
                 data:
                   swing_mode: "vertical"
-
-          # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
-          - conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: !input nuit_semaine
-                    state: "on"
-                  - condition: state
-                    entity_id: !input nuit_weekend
-                    state: "on"
-              - condition: numeric_state
-                entity_id: !input temp_actuelle
-                above: !input max_temp_nuit
-              - condition: numeric_state
-                entity_id: !input temp_cible
-                above: !input temp_ext
-            sequence:
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  hvac_mode: cool
-              - service: climate.set_fan_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  fan_mode: "high"
-              - service: climate.set_swing_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  swing_mode: "vertical"
-
+                  
           # Température actuelle inférieure à la température cible et inférieure à la température extérieure
           - conditions:
               - condition: numeric_state
@@ -417,30 +427,7 @@ action:
                 data:
                   hvac_mode: "off"
 
-          # Mode nuit - Température actuelle inférieure à la température cible et inférieure à la température extérieure
-          - conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: !input nuit_semaine
-                    state: "on"
-                  - condition: state
-                    entity_id: !input nuit_weekend
-                    state: "on"
-              - condition: numeric_state
-                entity_id: !input temp_actuelle
-                below: !input min_temp_nuit
-              - condition: numeric_state
-                entity_id: !input temp_cible
-                below: !input temp_ext
-            sequence:
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  hvac_mode: "off"
-
-          # Température actuelle dans les tolérances
+          # Température actuelle dans les tolérances et inférieure à la température extérieure
           - conditions:
               - condition: numeric_state
                 entity_id: !input temp_actuelle
@@ -467,41 +454,5 @@ action:
                   entity_id: !input clim_cible
                 data:
                   swing_mode: "vertical"
-
-          # Mode nuit - Température actuelle dans les tolérances et inférieure à la température extérieure
-          - conditions:
-              - condition: or
-                conditions:
-                  - condition: state
-                    entity_id: !input nuit_semaine
-                    state: "on"
-                  - condition: state
-                    entity_id: !input nuit_weekend
-                    state: "on"
-              - condition: numeric_state
-                entity_id: !input temp_actuelle
-                above: !input min_temp_nuit
-              - condition: numeric_state
-                entity_id: !input temp_actuelle
-                below: !input max_temp_nuit
-              - condition: numeric_state
-                entity_id: !input temp_cible
-                below: !input temp_ext
-            sequence:
-              - service: climate.set_hvac_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  hvac_mode: cool
-              - service: climate.set_fan_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  fan_mode: "auto"
-              - service: climate.set_swing_mode
-                target:
-                  entity_id: !input clim_cible
-                data:
-                  swing_mode: "vertical"
-
+                  
 mode: single
