@@ -316,7 +316,10 @@ action:
                   swing_mode: "vertical"
 
  # Gestion automatique générale, en fonction de la température extérieure
-    - conditions: []
+    - conditions:
+        - condition: state
+          entity_id: !input mode_nuit
+          state: "off"
       sequence:
         choose:
           # Température actuelle supérieure à la température cible et supérieure à la température extérieure
