@@ -1,54 +1,76 @@
-# 📌 Liste des Entrées Home Assistant
+# Liste des Entrées Home Assistant
 
-Ce fichier sert de référence pour la configuration et l'installation des entrées dans Home Assistant. Chaque entrée est classée par catégorie et contient son type ainsi que son identifiant.
+Ce fichier est une référence rapide pour la configuration et l'installation des entrées dans Home Assistant.
 
 ---
 
-## 📌 Mode Vacances (`mode_vacances`)
+## Table des Matières
+- [Mode Vacances](#mode-vacances)
+- [Gestion Nuit](#gestion-nuit)
+- [Gestion Temporelle](#gestion-temporelle)
+- [Gestion du Climat](#gestion-du-climat)
+- [Capteurs](#capteurs)
+- [Comment utiliser ce fichier](#comment-utiliser-ce-fichier)
 
-### **Explication**
-Ce mode permet de gérer la température et l'état de la maison lorsque vous êtes en vacances. Il contient des entrées pour la température minimale et maximale à respecter, ainsi qu'un interrupteur pour activer le mode vacances.
+---
 
-### **Entrées**
-- **Retour de vacances** (`input_datetime.retour_de_vacances`) → Date et heure de retour
-- **Mode Vacances** (`input_boolean.mode_vacances`) → Activation/Désactivation
+## Mode Vacances
+
+### Explication
+Ce mode gère la température et l'état de la maison lorsque vous êtes absent. Il permet de définir une température minimale et maximale, ainsi qu'une date de retour.
+
+### Entrées
+- **Retour de vacances** (`input_datetime.retour_de_vacances`) → Date et heure prévues de retour
+- **Mode Vacances** (`input_boolean.mode_vacances`) → Active/Désactive le mode
 - **Température min vacances** (`input_number.min_temp_vacances`) → Seuil minimum
 - **Température max vacances** (`input_number.max_temp_vacances`) → Seuil maximum
-- **Température min vacances (capteurs combinés)** (`sensor.min_temp_vacances`) → Valeur combinée
-- **Température max vacances (capteurs combinés)** (`sensor.max_temp_vacances`) → Valeur combinée
+- **Température min vacances (moyenne capteurs)** (`sensor.min_temp_vacances`)
+- **Température max vacances (moyenne capteurs)** (`sensor.max_temp_vacances`)
 
 ---
 
-## 🌙 Gestion Nuit (`gestion_nuit`)
+## Gestion Nuit
 
-### **Explication**
-Ce mode gère la température optimale pendant la nuit. Chaque pièce peut avoir des seuils et des températures cibles définies.
+### Explication
+Ce mode ajuste la température pendant la nuit selon des seuils définis pour chaque pièce.
 
-### **Entrées**
+### Entrées
 - **Température seuil min/max nuit par pièce** (`sensor.temp_seuil_min_nuit_pX`, `sensor.temp_seuil_max_nuit_pX`)
 - **Température cible nuit par pièce** (`input_number.temp_cible_nuit_pX`)
 - **Mode Nuit** (`input_boolean.mode_nuit`) → Active/Désactive le mode nuit
 
+Exemple YAML :
+```yaml
+- alias: "Mode Nuit Auto"
+  trigger:
+    - platform: time
+      at: "23:00:00"
+  action:
+    - service: input_boolean.turn_on
+      target:
+        entity_id: input_boolean.mode_nuit
+```
+
 ---
 
-## ⏳ Gestion Temporelle (`gestion_temporelle`)
+## Gestion Temporelle
 
-### **Explication**
-Cette section gère les périodes temporelles comme la nuit et les mises à jour saisonnières.
+### Explication
+Cette section permet de gérer les périodes temporelles comme la nuit et les changements de saison.
 
-### **Entrées**
-- **Nuit** (`schedule.nuit`) → Planification des périodes nocturnes
+### Entrées
+- **Nuit** (`schedule.nuit`) → Définition des périodes nocturnes
 - **Mise à jour saison** (`input_text.maj_saison`) → Indicateur de la saison actuelle
 
 ---
 
-## 🌡 Gestion du Climat (`gestion_du_climat`)
+## Gestion du Climat
 
-### **Explication**
-Cette section centralise la gestion des températures et de l'humidité.
+### Explication
+Centralise la gestion des températures et de l'humidité dans toutes les pièces.
 
-### **Entrées**
-- **Température moyenne** (`sensor.temp_moyenne`) → Calcul global
+### Entrées
+- **Température moyenne** (`sensor.temp_moyenne`)
 - **Température seuil min/max par pièce** (`sensor.temp_seuil_min_pX`, `sensor.temp_seuil_max_pX`)
 - **Température extérieure** (`sensor.temp_exterieure`)
 - **Température cible par pièce** (`input_number.temp_cible_pX`)
@@ -59,12 +81,12 @@ Cette section centralise la gestion des températures et de l'humidité.
 
 ---
 
-## 🔍 Capteurs (`capteurs`)
+## Capteurs
 
-### **Explication**
-Les capteurs sont les données brutes provenant de vos équipements (sondes, stations météo, etc.).
+### Explication
+Regroupe les données brutes des capteurs de température et d’humidité.
 
-### **Entrées**
+### Entrées
 - **Température par pièce** (`input_number.temperature_pX`)
 - **Température extérieure** (`input_number.temperature_ext`)
 - **Humidité par pièce** (`input_number.humidite_pX`)
@@ -72,10 +94,25 @@ Les capteurs sont les données brutes provenant de vos équipements (sondes, sta
 
 ---
 
-## 📌 Comment utiliser ce fichier ?
-1. **Identifier l'entrée** nécessaire pour votre automatisation.
-2. **Utiliser l'ID** correspondant dans vos scripts et configurations YAML.
-3. **Modifier les valeurs** dans Home Assistant si besoin.
+## Comment utiliser ce fichier ?
+1. **Identifier l'entrée** à utiliser dans votre automatisation.
+2. **Utiliser l'ID** correspondant dans vos scripts et fichiers YAML.
+3. **Ajuster les valeurs** si nécessaire via l’interface de Home Assistant.
 
-Ce fichier est conçu pour être une référence rapide et claire lors de l'installation et de la configuration des entrées dans Home Assistant. Assurez-vous de le garder à jour en fonction des changements de votre configuration domotique.
+Exemple YAML :
+```yaml
+- alias: "Régulation Climatisation"
+  trigger:
+    - platform: state
+      entity_id: sensor.temp_actuelle_p1
+      above: sensor.temp_cible_p1
+  action:
+    - service: climate.turn_on
+      target:
+        entity_id: climate.piece_1
+```
+
+---
+
+📌 **Assurez-vous de mettre à jour ce fichier lorsque votre configuration évolue.**
 
