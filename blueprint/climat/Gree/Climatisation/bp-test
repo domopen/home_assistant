@@ -109,14 +109,14 @@ action:
   choose:
     # Mode ON/OFF 
     - conditions:
-      - condition: state
-        entity_id: !input mode_onoff
-        state: "on"
-    sequence:
-      - service: climate.set_hvac_mode
-        target:
-          entity_id: !input clim_cible
-        data: "off"
+        - condition: state
+          entity_id: !input mode_onoff
+          state: "on"
+      sequence:
+        - service: climate.set_hvac_mode
+          target:
+            entity_id: !input clim_cible
+          data: "off"
 
     # Mode Vacances (prioritaire)
     - conditions:
