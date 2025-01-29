@@ -111,7 +111,7 @@ action:
     - conditions:
         - condition: state
           entity_id: !input mode_onoff
-          state: "on"
+          state: "off"
       sequence:
         - service: climate.set_hvac_mode
           target:
@@ -126,7 +126,7 @@ action:
           state: "on"
         - condition: state
           entity_id: !input mode_onoff
-          state: "off"
+          state: "on"
       sequence:
         choose: 
           # Arrêt des clims si min < température actuelle > max
@@ -202,7 +202,7 @@ action:
           state: "on"
         - condition: state
           entity_id: !input mode_onoff
-          state: "off"
+          state: "on"
       sequence:
         choose:
           # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
@@ -348,7 +348,7 @@ action:
           state: "off"
         - condition: state
           entity_id: !input mode_onoff
-          state: "off"
+          state: "on"
       sequence:
         choose:
           # Température actuelle supérieure à la température cible et supérieure à la température extérieure
