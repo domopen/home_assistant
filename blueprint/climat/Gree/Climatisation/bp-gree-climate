@@ -22,6 +22,12 @@ blueprint:
       selector:
         entity:
           domain: climate
+    mode_onoff:
+      name: ON/OFF général
+      description: Active/Désactive le climatiseur et son scénario.
+      selector:
+        entity:
+          domain: input_boolean
 
     # --- Paramètres de température généraux ---
     temp_cible:
@@ -92,6 +98,8 @@ blueprint:
 trigger:
   - platform: time_pattern
     minutes: "/10"
+  - platform: state
+    entity_id: !input mode_onoff
   - platform: state 
     entity_id: !input mode_nuit
   - platform: state
@@ -99,11 +107,26 @@ trigger:
 
 action:
   choose:
+    # Mode ON/OFF 
+    - conditions:
+        - condition: state
+          entity_id: !input mode_onoff
+          state: "on"
+      sequence:
+        - service: climate.set_hvac_mode
+          target:
+            entity_id: !input clim_cible
+          data: 
+            hvac_mode: "off"
+
     # Mode Vacances (prioritaire)
     - conditions:
         - condition: state
           entity_id: !input mode_vacances
           state: "on"
+        - condition: state
+          entity_id: !input mode_onoff
+          state: "off"
       sequence:
         choose: 
           # Arrêt des clims si min < température actuelle > max
@@ -177,6 +200,9 @@ action:
         - condition: state
           entity_id: !input mode_nuit
           state: "on"
+        - condition: state
+          entity_id: !input mode_onoff
+          state: "off"
       sequence:
         choose:
           # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
@@ -319,6 +345,9 @@ action:
     - conditions:
         - condition: state
           entity_id: !input mode_nuit
+          state: "off"
+        - condition: state
+          entity_id: !input mode_onoff
           state: "off"
       sequence:
         choose:
