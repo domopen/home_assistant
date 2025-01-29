@@ -1,0 +1,489 @@
+blueprint:
+  name: GA - Climatisation - 
+  description: Un blueprint pour ajuster automatiquement la climatisation en fonction de la température intérieure et extérieure mesurée. Et s'adapte un planning jour/nuit et semaine/weekend.
+  domain: automation
+  input:
+    # --- Capteurs et paramètres de base ---
+    temp_actuelle:
+      name: Capteur de température
+      description: Entité du capteur mesurant la température intérieure.
+      selector:
+        entity:
+          domain: sensor
+    temp_ext:
+      name: Température extérieure
+      description: Entité du capteur mesurant la température extérieure.
+      selector:
+        entity:
+          domain: sensor
+    clim_cible:
+      name: Entité du climatiseur
+      description: Entité de contrôle du climatiseur.
+      selector:
+        entity:
+          domain: climate
+    mode_onoff:
+      name: ON/OFF général
+      description: Active/Désactive le climatiseur et son scénario.
+      selector:
+        entity:
+          domain: input_boolean
+
+    # --- Paramètres de température généraux ---
+    temp_cible:
+      name: Température cible
+      description: Capteur indiquant la température souhaitée.
+      selector: 
+        entity: 
+          domain: sensor
+    min_temp:
+      name: Température minimale tolérée
+      description: Température en dessous de laquelle le chauffage se déclenche.
+      selector:
+        entity:
+          domain: sensor
+    max_temp:
+      name: Température maximale tolérée
+      description: Température au-dessus de laquelle le refroidissement se déclenche.
+      selector:
+        entity:
+          domain: sensor
+
+    # --- Mode Nuit ---
+    mode_nuit:
+      name: ON/OFF du mode nuit
+      description: Active ou désactive le mode nuit.
+      selector:
+        entity:
+          domain: input_boolean
+    temp_cible_nuit:
+      name: Température de nuit
+      description: Température cible pendant la nuit.
+      selector:
+        entity:
+          domain: sensor
+    min_temp_nuit:
+      name: Température minimale tolérée la nuit
+      description: Température minimale pendant les périodes de nuit.
+      selector:
+        entity:
+          domain: sensor
+    max_temp_nuit:
+      name: Température maximale tolérée la nuit
+      description: Température maximale pendant les périodes de nuit.
+      selector:
+        entity:
+          domain: sensor
+
+    # --- Mode Vacances ---
+    mode_vacances:
+      name: ON/OFF du mode vacances
+      description: Active ou désactive le mode vacances (désactive les autres modes).
+      selector:
+        entity:
+          domain: input_boolean
+    min_temp_vacances:
+      name: Température minimale tolérée en mode vacances
+      description: Température minimale tolérée lorsque le mode vacances est activé.
+      selector:
+        entity:
+          domain: sensor
+    max_temp_vacances:
+      name: Température maximale tolérée en mode vacances
+      description: Température maximale tolérée lorsque le mode vacances est activé.
+      selector:
+        entity:
+          domain: sensor
+
+trigger:
+  - platform: time_pattern
+    minutes: "/10"
+  - platform: state
+    entity_id: !input mode_onoff
+  - platform: state 
+    entity_id: !input mode_nuit
+  - platform: state
+    entity_id: !input mode_vacances
+
+action:
+  choose:
+    # Mode ON/OFF 
+    - conditions:
+      - condition: state
+        entity_id: !input mode_onoff
+        state: "on"
+    sequence:
+      - service: climate.set_hvac_mode
+        target:
+          entity_id: !input clim_cible
+        data: "off"
+
+    # Mode Vacances (prioritaire)
+    - conditions:
+        - condition: state
+          entity_id: !input mode_vacances
+          state: "on"
+        - condition: state
+          entity_id: !input mode_onoff
+          state: "off"
+      sequence:
+        choose: 
+          # Arrêt des clims si min < température actuelle > max
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input min_temp_vacances
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data: 
+                  hvac_mode: "off"
+
+          - conditions: 
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input max_temp_vacances
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data: 
+                  hvac_mode: "off"
+
+          # Démarre en dehors des conditions précédentes
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input max_temp_vacances
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data: 
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input min_temp_vacances
+            sequence: 
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data: 
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+    # Mode Nuit
+    - conditions:
+        - condition: state
+          entity_id: !input mode_nuit
+          state: "on"
+        - condition: state
+          entity_id: !input mode_onoff
+          state: "off"
+      sequence:
+        choose:
+          # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: "off"
+
+          # Mode nuit - Température actuelle inférieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input min_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          # Mode nuit - Température actuelle dans les tolérances et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input min_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          # Mode nuit - Température actuelle supérieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input min_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: "off"
+
+          # Mode nuit - Température actuelle inférieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          # Mode nuit - Température actuelle dans les tolérances et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input min_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input max_temp_nuit
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+ # Gestion automatique générale, en fonction de la température extérieure
+    - conditions:
+        - condition: state
+          entity_id: !input mode_nuit
+          state: "off"
+        - condition: state
+          entity_id: !input mode_onoff
+          state: "off"
+      sequence:
+        choose:
+          # Température actuelle supérieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input max_temp
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: "off"
+
+          # Température actuelle inférieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input min_temp
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          # Température actuelle dans les tolérances et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input min_temp
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input max_temp
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: heat
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+
+          # Température actuelle supérieure à la température cible et supérieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input max_temp
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                above: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "high"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+                  
+          # Température actuelle inférieure à la température cible et inférieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input min_temp
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: "off"
+
+          # Température actuelle dans les tolérances et inférieure à la température extérieure
+          - conditions:
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                above: !input min_temp
+              - condition: numeric_state
+                entity_id: !input temp_actuelle
+                below: !input max_temp
+              - condition: numeric_state
+                entity_id: !input temp_cible
+                below: !input temp_ext
+            sequence:
+              - service: climate.set_hvac_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  hvac_mode: cool
+              - service: climate.set_fan_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  fan_mode: "auto"
+              - service: climate.set_swing_mode
+                target:
+                  entity_id: !input clim_cible
+                data:
+                  swing_mode: "vertical"
+                  
+mode: single
