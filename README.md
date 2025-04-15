@@ -23,21 +23,21 @@ Toutes nos solutions sont **100% open source**, libres d'utilisation et amélior
 🔐 **Respect de la vie privée** : Nous privilégions des outils **autonomes**, en limitant les dépendances aux clouds externes.  
 🛠️ **Open Source & Collaboratif** : Chacun peut contribuer, améliorer et adapter nos solutions à ses besoins.  
 
-📜 **Licence** : Tous nos développements sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
+📜 **Licence** : Tous nos développements destinés à être installé chez nos clients sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
 
 ---
 
 
-📢 **Rejoignez-nous** : Nous partageons régulièrement de nouvelles automatisations et améliorations.  
+📢 **Rejoignez-nous** : Nous partagerons régulièrement de nouvelles automatisations, applications et améliorations.  
 
 ---
 
 ## 📥 **Comment Contribuer ?**  
 
-1️⃣ **Forkez** ce dépôt et testez nos solutions.  
+1️⃣ **Forkez** nos dépôts et testez nos solutions.  
 2️⃣ **Proposez des améliorations** via des **Pull Requests**.  
 3️⃣ **Partagez vos retours** pour aider la communauté à progresser.  
 
-🌎 **Ensemble, développons un écosystème domotique libre et performant !**  
+🌎 **Ensemble, développons un écosystème libre et performant !**  
 
 ---
