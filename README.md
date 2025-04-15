@@ -23,7 +23,7 @@ Toutes nos solutions sont **100% open source**, libres d'utilisation et amélior
 🔐 **Respect de la vie privée** : Nous privilégions des outils **autonomes**, en limitant les dépendances aux clouds externes.  
 🛠️ **Open Source & Collaboratif** : Chacun peut contribuer, améliorer et adapter nos solutions à ses besoins.  
 
-📜 **Licence** : Tous nos développements destinés à être installé chez nos clients sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
+📜 **Licence** : Tous los développements présenté ici sont destinés à être installé chez nos clients et sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
 
 ---
 
