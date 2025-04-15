@@ -1,9 +1,0 @@
-sequence:
-  - action: automation.trigger
-    metadata: {}
-    data:
-      skip_condition: true
-    target:
-      entity_id: automation.
-alias: rechargement-automatisation
-description: "Recharge la/les automatisations selectionnées"
