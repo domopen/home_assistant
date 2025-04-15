@@ -13,8 +13,6 @@ Notre engagement ? **Offrir des solutions évolutives, accessibles et respectueu
 🔸 **Automatisations** → Scénarios avancés pour gérer votre habitat de manière intelligente.  
 🔹 **Scripts** → Outils spécifiques pour optimiser votre installation domotique.  
 
-Toutes nos solutions sont **100% open source**, libres d'utilisation et améliorables par la communauté.  
-
 ---
 
 ## 🌍 **Pourquoi choisir domOpen ?**  
@@ -23,12 +21,11 @@ Toutes nos solutions sont **100% open source**, libres d'utilisation et amélior
 🔐 **Respect de la vie privée** : Nous privilégions des outils **autonomes**, en limitant les dépendances aux clouds externes.  
 🛠️ **Open Source & Collaboratif** : Chacun peut contribuer, améliorer et adapter nos solutions à ses besoins.  
 
-📜 **Licence** : Tous los développements présenté ici sont destinés à être installé chez nos clients et sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
+📜 **Licence** : Tous les **développements** présentés ici sont destinés à être installés chez nos clients et sont publiés sous **licence open source**, garantissant transparence et accessibilité.  
 
 ---
 
-
-📢 **Rejoignez-nous** : Nous partagerons régulièrement de nouvelles automatisations et améliorations.  
+📢 **Rejoignez-nous** : Nous partagerons régulièrement de nouvelles automatisations et améliorations de ces dernières.  
 
 ---
 
