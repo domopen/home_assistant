@@ -28,7 +28,7 @@ Toutes nos solutions sont **100% open source**, libres d'utilisation et amélior
 ---
 
 
-📢 **Rejoignez-nous** : Nous partagerons régulièrement de nouvelles automatisations, applications et améliorations.  
+📢 **Rejoignez-nous** : Nous partagerons régulièrement de nouvelles automatisations et améliorations.  
 
 ---
 
