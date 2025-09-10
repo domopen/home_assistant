@@ -1,6 +1,6 @@
 # 🏠 Bienvenue sur le GitHub de **domOpen**  
 
-💡 **domOpen est une entreprise spécialisée dans les solutions domotiques open source**.  
+💡 **domOpen est une entreprise spécialisée dans les solutions de vidéosurveillance et domotique open source**.  
 Nous concevons et partageons des **blueprints, automatisations et scripts** pour améliorer votre **confort, sécurité et efficacité énergétique** avec Home Assistant.  
 
 Notre engagement ? **Offrir des solutions évolutives, accessibles et respectueuses de la vie privée.**  
