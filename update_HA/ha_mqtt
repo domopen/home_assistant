@@ -1,0 +1,21 @@
+alias: Mise à jour automatique - MQTT
+description: ""
+triggers:
+  - trigger: state
+    entity_id:
+      - update.zigbee2mqtt_update
+      - update.mosquitto_broker_update
+    from: "on"
+  - trigger: time_pattern
+    hours: "04"
+conditions: []
+actions:
+  - action: update.install
+    metadata: {}
+    data:
+      backup: true
+    target:
+      entity_id:
+        - update.zigbee2mqtt_update
+        - update.mosquitto_broker_update
+mode: restart
