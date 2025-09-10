@@ -1,0 +1,22 @@
+alias: Lumière - Luminosité Automatique
+description: "Ajustement automatique de l'intensité lumineuse selon l'heure" 
+triggers:
+  - at: "22:00:00"
+    trigger: time
+  - at: "01:00:00"
+    trigger: time
+  - at: "08:00:00"
+    trigger: time
+actions:
+  - target:
+      entity_id: input_number.lumieres_1
+    data:
+      value: |
+        {% if now().hour == 22 %}
+          30
+        {% elif now().hour == 1 %}
+          10
+        {% else %}
+          60
+        {% endif %}
+    action: input_number.set_value
