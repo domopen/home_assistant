@@ -1,0 +1,46 @@
+alias: Lumière - Allumage et extinction automatique
+description: "Utilisation d'un détecteur de mouvement, basé sur la luminosité ambiante OU position du soleil + boolean pour affichage UX"
+triggers:
+  - type: occupied
+    device_id: "VOTRE_APPAREIL"
+    entity_id: "VOTRE_APPAREIL"
+    domain: binary_sensor
+    trigger: device
+conditions:
+  - condition: template
+    value_template: >
+      {% set lux = states('sensor.detecteur_palier_1e_illuminance') | int %} {%
+      set elevation = state_attr('sun.sun', 'elevation') %} {{ lux < 15 or
+      elevation < 15 }}
+actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: "{{ states('input_number.lumieres_luminosite_setup') | int }}"
+    target:
+      entity_id:
+        - light.lumiere_1
+        - light.lumiere_2
+  - action: input_boolean.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.lumiere_1
+  - delay:
+      hours: 0
+      minutes: 0
+      seconds: 45
+      milliseconds: 0
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+        - light.lumiere_1
+        - light.lumiere_2
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.lumiere_1
+mode: restart
