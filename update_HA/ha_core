@@ -1,0 +1,21 @@
+alias: Mise à jour automatique - Home Assistant Core
+description: Installe la mise à jour du Core après 1h de disponibilité
+triggers:
+  - entity_id:
+      - update.home_assistant_core_update
+      - update.home_assistant_supervisor_update
+      - update.home_assistant_operating_system_update
+    to: "on"
+    trigger: state
+  - trigger: time_pattern
+    hours: "04"
+actions:
+  - action: update.install
+    data:
+      backup: true
+    target:
+      entity_id:
+        - update.home_assistant_core_update
+        - update.home_assistant_supervisor_update
+        - update.home_assistant_operating_system_update
+mode: restart
