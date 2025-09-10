@@ -1,0 +1,53 @@
+alias: Lumière - ON/OFF et Intensité +/-
+description: "Permets de contrôler depuis une télécommande Hue la lumière"
+triggers:
+  - domain: mqtt
+    device_id: "VOTRE_APPAREIL"
+    type: action
+    subtype: on_press
+    trigger: device
+    id: "ON"
+  - domain: mqtt
+    device_id: "VOTRE_APPAREIL"
+    type: action
+    subtype: up_press
+    trigger: device
+    id: UP
+  - domain: mqtt
+    device_id: "VOTRE_APPAREIL"
+    type: action
+    subtype: down_press
+    trigger: device
+    id: DOWN
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id:
+              - "ON"
+        sequence:
+          - action: light.toggle
+            metadata: {}
+            data: {}
+            target:
+              entity_id: light.lumiere_1
+      - conditions:
+          - condition: trigger
+            id:
+              - UP
+        sequence:
+          - device_id: "VOTRE_APPAREIL"
+            domain: light
+            entity_id: "VOTRE_APPAREIL"
+            type: brightness_increase
+      - conditions:
+          - condition: trigger
+            id:
+              - DOWN
+        sequence:
+          - device_id: "VOTRE_APPAREIL"
+            domain: light
+            entity_id: "VOTRE_APPAREIL"
+            type: brightness_decrease
+mode: single
